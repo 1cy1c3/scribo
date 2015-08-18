@@ -17,12 +17,12 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionNew_triggered()
 {
     fileName = "";
-    ui->textEdit_mainWindow_surface->setPlainText("");
+    ui->textEdit_mainWindow_surface->setHtml("");
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Open a file");
+    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(), "text files (*.txt)");
 
     if ( !file.isEmpty() )
     {
@@ -34,29 +34,35 @@ void MainWindow::on_actionOpen_triggered()
             QString text = in.readAll();
             sFile.close();
 
-            ui->textEdit_mainWindow_surface->setPlainText(text);
+            ui->textEdit_mainWindow_surface->setHtml(text);
         }
     }
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-    QFile sFile(fileName);
-    if ( sFile.open(QFile::WriteOnly | QFile::Text) )
+    if ( fileName.isEmpty() )
     {
-        QTextStream out(&sFile);
+        on_actionSave_As_triggered();
+    } else
+    {
+        QFile sFile(fileName);
+        if ( sFile.open(QFile::WriteOnly | QFile::Text) )
+        {
+            QTextStream out(&sFile);
 
-        out << ui->textEdit_mainWindow_surface->toPlainText();
+            out << ui->textEdit_mainWindow_surface->toHtml();
 
-        sFile.flush();
-        sFile.close();
+            sFile.flush();
+            sFile.close();
+        }
     }
 }
 
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, "Open a file");
+    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::currentPath(), "text files (*.txt)");
 
     if ( !file.isEmpty() )
     {
