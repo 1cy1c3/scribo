@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;

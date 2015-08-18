@@ -22,17 +22,47 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    QString file = QFileDialog::getOpenFileName(this, "Open a file");
 
+    if ( !file.isEmpty() )
+    {
+        QFile sFile(file);
+        if (sFile.open(QFile::ReadOnly | QFile::Text) )
+        {
+            fileName = file;
+            QTextStream in(&sFile);
+            QString text = in.readAll();
+            sFile.close();
+
+            ui->textEdit_mainWindow_surface->setPlainText(text);
+        }
+    }
 }
 
 void MainWindow::on_actionSave_triggered()
 {
+    QFile sFile(fileName);
+    if ( sFile.open(QFile::WriteOnly | QFile::Text) )
+    {
+        QTextStream out(&sFile);
 
+        out << ui->textEdit_mainWindow_surface->toPlainText();
+
+        sFile.flush();
+        sFile.close();
+    }
 }
+
 
 void MainWindow::on_actionSave_As_triggered()
 {
+    QString file = QFileDialog::getSaveFileName(this, "Open a file");
 
+    if ( !file.isEmpty() )
+    {
+        fileName = file;
+        on_actionSave_triggered();
+    }
 }
 
 void MainWindow::on_actionCopy_triggered()
