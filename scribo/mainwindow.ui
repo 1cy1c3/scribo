@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>457</width>
     <height>300</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>381</width>
+      <width>441</width>
       <height>221</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>457</width>
      <height>22</height>
     </rect>
    </property>
@@ -56,6 +56,11 @@
     <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionNormal"/>
+    <addaction name="actionBold"/>
+    <addaction name="actionItalic"/>
+    <addaction name="actionUnderline"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -79,12 +84,17 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNormal"/>
+   <addaction name="actionBold"/>
+   <addaction name="actionItalic"/>
+   <addaction name="actionUnderline"/>
+   <addaction name="separator"/>
    <addaction name="actionCopy"/>
    <addaction name="actionCut"/>
    <addaction name="actionPaste"/>
    <addaction name="separator"/>
-   <addaction name="actionRedo"/>
    <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -211,6 +221,42 @@
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionBold">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/bold.png</normaloff>:/img/bold.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bold</string>
+   </property>
+  </action>
+  <action name="actionNormal">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/normal.png</normaloff>:/img/normal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Normal</string>
+   </property>
+  </action>
+  <action name="actionItalic">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/italic.png</normaloff>:/img/italic.png</iconset>
+   </property>
+   <property name="text">
+    <string>Italic</string>
+   </property>
+  </action>
+  <action name="actionUnderline">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/underline.png</normaloff>:/img/underline.png</iconset>
+   </property>
+   <property name="text">
+    <string>Underline</string>
    </property>
   </action>
  </widget>

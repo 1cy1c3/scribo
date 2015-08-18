@@ -13,5 +13,9 @@
         <file>img/settings.png</file>
         <file>img/close.png</file>
         <file>img/open.png</file>
+        <file>img/bold.png</file>
+        <file>img/italic.png</file>
+        <file>img/normal.png</file>
+        <file>img/underline.png</file>
     </qresource>
 </RCC>

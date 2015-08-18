@@ -16,5 +16,110 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNew_triggered()
 {
+    fileName = "";
+    ui->textEdit_mainWindow_surface->setPlainText("");
+}
 
+void MainWindow::on_actionOpen_triggered()
+{
+
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+    ui->textEdit_mainWindow_surface->copy();
+}
+
+void MainWindow::on_actionCut_triggered()
+{
+    ui->textEdit_mainWindow_surface->cut();
+}
+
+void MainWindow::on_actionUndo_triggered()
+{
+    ui->textEdit_mainWindow_surface->undo();
+}
+
+void MainWindow::on_actionRedo_triggered()
+{
+    ui->textEdit_mainWindow_surface->redo();
+}
+
+void MainWindow::on_actionPaste_triggered()
+{
+    ui->textEdit_mainWindow_surface->paste();
+}
+
+void MainWindow::on_actionScribo_Help_triggered()
+{
+
+}
+
+void MainWindow::on_actionCheck_for_updates_triggered()
+{
+
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+
+}
+
+void MainWindow::on_actionClose_triggered()
+{
+    QApplication::quit();
+}
+
+void MainWindow::on_actionNormal_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontWeight(QFont::Normal);
+    fmt.setFontItalic(false);
+    fmt.setFontUnderline(false);
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_actionBold_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontWeight(QFont::Bold);
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_actionItalic_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontItalic(true);
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::on_actionUnderline_triggered()
+{
+    QTextCharFormat fmt;
+    fmt.setFontUnderline(true);
+    mergeFormatOnWordOrSelection(fmt);
+}
+
+void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
+{
+    QTextCursor cursor = ui->textEdit_mainWindow_surface->textCursor();
+    if ( !cursor.hasSelection() )
+        cursor.select(QTextCursor::WordUnderCursor);
+    cursor.mergeCharFormat(format);
+    ui->textEdit_mainWindow_surface->mergeCurrentCharFormat(format);
 }
