@@ -195,3 +195,37 @@ void MainWindow::on_actionJustification_triggered()
     cursor.mergeBlockFormat(textBlockFormat);
     ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }
+
+void MainWindow::on_actionFont_triggered()
+{
+    color = QColorDialog::getColor(Qt::white, this);
+    ui->textEdit_mainWindow_surface->setTextColor(color);
+}
+
+void MainWindow::on_actionHighlighting_triggered()
+{
+    color = QColorDialog::getColor(Qt::white, this);
+    ui->textEdit_mainWindow_surface->setTextBackgroundColor(color);
+}
+
+void MainWindow::on_actionBackground_triggered()
+{
+    QPalette* palette = new QPalette();
+    color = QColorDialog::getColor(Qt::white, this);
+    palette->setColor(QPalette::Base, color);
+    ui->textEdit_mainWindow_surface->setPalette(*palette);
+}
+
+void MainWindow::on_actionFont_2_triggered()
+{
+    bool ok;
+    font = QFontDialog::getFont(&ok, this);
+    if (!ok) {
+        return;
+    } else {
+        cursor = ui->textEdit_mainWindow_surface->textCursor();
+        QTextCharFormat textCharFormat = cursor.charFormat();
+        textCharFormat.setFont(font);
+        cursor.setCharFormat(textCharFormat);
+    }
+}

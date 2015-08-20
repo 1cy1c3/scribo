@@ -5,6 +5,9 @@
 #include <QtCore>
 #include <QtGui>
 #include <QFileDialog>
+#include <QColor>
+#include <QColorDialog>
+#include <QFontDialog>
 
 namespace Ui {
 class MainWindow;
@@ -63,10 +66,20 @@ private slots:
 
     void on_actionJustification_triggered();
 
+    void on_actionFont_triggered();
+
+    void on_actionHighlighting_triggered();
+
+    void on_actionBackground_triggered();
+
+    void on_actionFont_2_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString fileName;
     QTextCursor cursor;
+    QColor color;
+    QFont font;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
 };
 

@@ -50,16 +50,6 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionNormal"/>
-    <addaction name="actionBold"/>
-    <addaction name="actionItalic"/>
-    <addaction name="actionUnderline"/>
-    <addaction name="separator"/>
-    <addaction name="actionAlign_text_left"/>
-    <addaction name="actionCenter_text"/>
-    <addaction name="actionAlign_text_right"/>
-    <addaction name="actionJustification"/>
-    <addaction name="separator"/>
     <addaction name="actionCopy"/>
     <addaction name="actionCut"/>
     <addaction name="actionPaste"/>
@@ -78,8 +68,38 @@
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
+   <widget class="QMenu" name="menuFormat">
+    <property name="title">
+     <string>Format</string>
+    </property>
+    <widget class="QMenu" name="menuColor_6">
+     <property name="title">
+      <string>Color</string>
+     </property>
+     <property name="icon">
+      <iconset resource="app.qrc">
+       <normaloff>:/img/color.png</normaloff>:/img/color.png</iconset>
+     </property>
+     <addaction name="actionFont"/>
+     <addaction name="actionHighlighting"/>
+     <addaction name="actionBackground"/>
+    </widget>
+    <addaction name="menuColor_6"/>
+    <addaction name="actionFont_2"/>
+    <addaction name="separator"/>
+    <addaction name="actionNormal"/>
+    <addaction name="actionBold"/>
+    <addaction name="actionItalic"/>
+    <addaction name="actionUnderline"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlign_text_left"/>
+    <addaction name="actionCenter_text"/>
+    <addaction name="actionAlign_text_right"/>
+    <addaction name="actionJustification"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuFormat"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -241,6 +261,9 @@
    <property name="text">
     <string>Bold</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
   </action>
   <action name="actionNormal">
    <property name="icon">
@@ -249,6 +272,9 @@
    </property>
    <property name="text">
     <string>Normal</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionItalic">
@@ -259,6 +285,9 @@
    <property name="text">
     <string>Italic</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
   </action>
   <action name="actionUnderline">
    <property name="icon">
@@ -267,6 +296,9 @@
    </property>
    <property name="text">
     <string>Underline</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionAlign_text_left">
@@ -303,6 +335,30 @@
    </property>
    <property name="text">
     <string>Justification</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="text">
+    <string>Font</string>
+   </property>
+  </action>
+  <action name="actionHighlighting">
+   <property name="text">
+    <string>Highlighting</string>
+   </property>
+  </action>
+  <action name="actionBackground">
+   <property name="text">
+    <string>Background</string>
+   </property>
+  </action>
+  <action name="actionFont_2">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/font.png</normaloff>:/img/font.png</iconset>
+   </property>
+   <property name="text">
+    <string>Font</string>
    </property>
   </action>
  </widget>
