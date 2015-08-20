@@ -17,5 +17,9 @@
         <file>img/italic.png</file>
         <file>img/normal.png</file>
         <file>img/underline.png</file>
+        <file>img/centered.png</file>
+        <file>img/flushLeft.png</file>
+        <file>img/flushRight.png</file>
+        <file>img/justification.png</file>
     </qresource>
 </RCC>

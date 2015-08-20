@@ -153,9 +153,45 @@ void MainWindow::on_actionUnderline_triggered()
 
 void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
-    QTextCursor cursor = ui->textEdit_mainWindow_surface->textCursor();
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
     if ( !cursor.hasSelection() )
         cursor.select(QTextCursor::WordUnderCursor);
     cursor.mergeCharFormat(format);
     ui->textEdit_mainWindow_surface->mergeCurrentCharFormat(format);
+}
+
+void MainWindow::on_actionAlign_text_left_triggered()
+{
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(Qt::AlignLeft);
+    cursor.mergeBlockFormat(textBlockFormat);
+    ui->textEdit_mainWindow_surface->setTextCursor(cursor);
+}
+
+void MainWindow::on_actionCenter_text_triggered()
+{
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(Qt::AlignCenter);
+    cursor.mergeBlockFormat(textBlockFormat);
+    ui->textEdit_mainWindow_surface->setTextCursor(cursor);
+}
+
+void MainWindow::on_actionAlign_text_right_triggered()
+{
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(Qt::AlignRight);
+    cursor.mergeBlockFormat(textBlockFormat);
+    ui->textEdit_mainWindow_surface->setTextCursor(cursor);
+}
+
+void MainWindow::on_actionJustification_triggered()
+{
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(Qt::AlignJustify);
+    cursor.mergeBlockFormat(textBlockFormat);
+    ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }

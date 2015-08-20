@@ -55,9 +55,18 @@ private slots:
 
     void on_actionUnderline_triggered();
 
+    void on_actionAlign_text_left_triggered();
+
+    void on_actionCenter_text_triggered();
+
+    void on_actionAlign_text_right_triggered();
+
+    void on_actionJustification_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString fileName;
+    QTextCursor cursor;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
 };
 

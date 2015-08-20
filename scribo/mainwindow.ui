@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
+    <width>654</width>
     <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Scribo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTextEdit" name="textEdit_mainWindow_surface">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>441</width>
+      <width>631</width>
       <height>221</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>457</width>
+     <width>654</width>
      <height>22</height>
     </rect>
    </property>
@@ -50,17 +50,22 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionNormal"/>
+    <addaction name="actionBold"/>
+    <addaction name="actionItalic"/>
+    <addaction name="actionUnderline"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlign_text_left"/>
+    <addaction name="actionCenter_text"/>
+    <addaction name="actionAlign_text_right"/>
+    <addaction name="actionJustification"/>
+    <addaction name="separator"/>
     <addaction name="actionCopy"/>
     <addaction name="actionCut"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
-    <addaction name="separator"/>
-    <addaction name="actionNormal"/>
-    <addaction name="actionBold"/>
-    <addaction name="actionItalic"/>
-    <addaction name="actionUnderline"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -88,6 +93,11 @@
    <addaction name="actionBold"/>
    <addaction name="actionItalic"/>
    <addaction name="actionUnderline"/>
+   <addaction name="separator"/>
+   <addaction name="actionAlign_text_left"/>
+   <addaction name="actionCenter_text"/>
+   <addaction name="actionAlign_text_right"/>
+   <addaction name="actionJustification"/>
    <addaction name="separator"/>
    <addaction name="actionCopy"/>
    <addaction name="actionCut"/>
@@ -257,6 +267,42 @@
    </property>
    <property name="text">
     <string>Underline</string>
+   </property>
+  </action>
+  <action name="actionAlign_text_left">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/flushLeft.png</normaloff>:/img/flushLeft.png</iconset>
+   </property>
+   <property name="text">
+    <string>Align text left</string>
+   </property>
+  </action>
+  <action name="actionCenter_text">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/centered.png</normaloff>:/img/centered.png</iconset>
+   </property>
+   <property name="text">
+    <string>Center text</string>
+   </property>
+  </action>
+  <action name="actionAlign_text_right">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/flushRight.png</normaloff>:/img/flushRight.png</iconset>
+   </property>
+   <property name="text">
+    <string>Align text right</string>
+   </property>
+  </action>
+  <action name="actionJustification">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/justification.png</normaloff>:/img/justification.png</iconset>
+   </property>
+   <property name="text">
+    <string>Justification</string>
    </property>
   </action>
  </widget>
