@@ -1,12 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "preference.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->setCentralWidget(ui->textEdit_mainWindow_surface);
+
+    updatePreferences();
+
+    preference = new Preference();
+    connect(preference, SIGNAL(preferencesChanged()), this, SLOT(updatePreferences()));
 }
 
 MainWindow::~MainWindow()
@@ -78,7 +85,15 @@ void MainWindow::on_actionCopy_triggered()
 
 void MainWindow::on_actionCut_triggered()
 {
-    ui->textEdit_mainWindow_surface->cut();
+    //ui->textEdit_mainWindow_surface->cut();
+    QSettings setting("rk", "scribo");
+    setting.beginGroup("writing");
+    QString style = "#textEdit_mainWindow_surface { margin: 0 "+
+            setting.value("marginLeft", 0).toString() +
+            " 0 " +
+            setting.value("marginRight", 0).toString() + "; }";
+    ui->textEdit_mainWindow_surface->setStyleSheet(style);
+    setting.endGroup();
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -113,7 +128,8 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionSettings_triggered()
 {
-
+    preference->setModal(true);
+    preference->exec();
 }
 
 void MainWindow::on_actionClose_triggered()
@@ -228,4 +244,16 @@ void MainWindow::on_actionFont_2_triggered()
         textCharFormat.setFont(font);
         cursor.setCharFormat(textCharFormat);
     }
+}
+
+void MainWindow::updatePreferences()
+{
+    QSettings setting("rk", "scribo");
+    setting.beginGroup("writing");
+    QString style = "#textEdit_mainWindow_surface { margin: 0 "+
+            setting.value("marginRight", 0).toString() +
+            " 0 " +
+            setting.value("marginLeft", 0).toString() + "; }";
+    ui->textEdit_mainWindow_surface->setStyleSheet(style);
+    setting.endGroup();
 }

@@ -9,6 +9,8 @@
 #include <QColorDialog>
 #include <QFontDialog>
 
+class Preference;
+
 namespace Ui {
 class MainWindow;
 }
@@ -74,12 +76,15 @@ private slots:
 
     void on_actionFont_2_triggered();
 
+    void updatePreferences(); // const QString &name
+
 private:
     Ui::MainWindow *ui;
     QString fileName;
     QTextCursor cursor;
     QColor color;
     QFont font;
+    Preference *preference;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
 };
 
