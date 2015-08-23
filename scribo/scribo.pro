@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     preference.cpp \
-    aes.cpp
+    aes.cpp \
+    regex.cpp
 
 HEADERS  += mainwindow.h \
     preference.h \
-    aes.h
+    aes.h \
+    regex.h
 
 FORMS    += mainwindow.ui \
     preference.ui

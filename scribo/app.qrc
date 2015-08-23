@@ -23,5 +23,7 @@
         <file>img/justification.png</file>
         <file>img/color.png</file>
         <file>img/font.png</file>
+        <file>img/decryption.png</file>
+        <file>img/encryption.png</file>
     </qresource>
 </RCC>

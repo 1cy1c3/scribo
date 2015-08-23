@@ -8,6 +8,7 @@
 #include <QColor>
 #include <QColorDialog>
 #include <QFontDialog>
+#include <QInputDialog>
 
 class Preference;
 
@@ -22,6 +23,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+signals:
+    void backgroundChanged();
 
 private slots:
     void on_actionNew_triggered();
@@ -77,6 +81,10 @@ private slots:
     void on_actionFont_2_triggered();
 
     void updatePreferences(); // const QString &name
+
+    void on_actionEncrypt_triggered();
+
+    void on_actionDecrypt_triggered();
 
 private:
     Ui::MainWindow *ui;

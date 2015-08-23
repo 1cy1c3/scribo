@@ -53,6 +53,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QUuid>
+#include <QDebug>
 
 #define N_ROW                   4
 #define N_COL                   4
@@ -122,7 +123,7 @@
     w(0x8c), w(0xa1), w(0x89), w(0x0d), w(0xbf), w(0xe6), w(0x42), w(0x68),\
     w(0x41), w(0x99), w(0x2d), w(0x0f), w(0xb0), w(0x54), w(0xbb), w(0x16) }
 
-#define isb_data(w) {   /* inverse S Box data values */                    \
+#define isb_data(w) {   /* Inverse S Box data values */                    \
     w(0x52), w(0x09), w(0x6a), w(0xd5), w(0x30), w(0x36), w(0xa5), w(0x38),\
     w(0xbf), w(0x40), w(0xa3), w(0x9e), w(0x81), w(0xf3), w(0xd7), w(0xfb),\
     w(0x7c), w(0xe3), w(0x39), w(0x82), w(0x9b), w(0x2f), w(0xff), w(0x87),\
@@ -190,8 +191,8 @@
     w(0xf0), w(0xf1), w(0xf2), w(0xf3), w(0xf4), w(0xf5), w(0xf6), w(0xf7),\
     w(0xf8), w(0xf9), w(0xfa), w(0xfb), w(0xfc), w(0xfd), w(0xfe), w(0xff) }
 
-typedef unsigned char uint_8t;
-typedef unsigned long uint_32t;
+typedef quint8 uint_8t;
+typedef quint32 uint_32t;
 typedef uint_8t aes_result;
 
 static const uint_8t sbox[256]  =  sb_data(f1);
@@ -207,47 +208,46 @@ static const uint_8t gfmul_e[256] = mm_data(fe);
 
 class AES
 {
-    public:
+public:
+    AES();
 
-        AES();
+    // Public functions
+    QByteArray encrypt(QByteArray p_input, QByteArray p_key);
+    QByteArray decrypt(QByteArray p_input, QByteArray p_key);
+    QByteArray encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv);
+    QByteArray decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv);
+    QByteArray hexStringToByte(QString key);
 
-        // Public functions
-        QByteArray Encrypt(QByteArray p_input, QByteArray p_key);
-        QByteArray Decrypt(QByteArray p_input, QByteArray p_key);
-        QByteArray Encrypt(QByteArray p_input, QByteArray p_key, QByteArray p_iv);
-        QByteArray Decrypt(QByteArray p_input, QByteArray p_key, QByteArray p_iv);
-        QByteArray HexStringToByte(QString key);
+private:
 
-    private:
+    typedef struct
+    {
+        uint_8t ksch[(N_MAX_ROUNDS + 1) * N_BLOCK];
+        uint_8t rnd;
+    } aes_context;
 
-        typedef struct
-        {
-            uint_8t ksch[(N_MAX_ROUNDS + 1) * N_BLOCK];
-            uint_8t rnd;
-        } aes_context;
+    // QT helper functions
+    void qByteArrayToUCharArray(QByteArray src, unsigned char *dest);
+    QByteArray uCharArrayToQByteArray(unsigned char *src, int p_size);
+    void removePadding(QByteArray *input);
+    void addPadding(QByteArray *input);
+    QByteArray generateRandomBytes(int length);
 
-        // QT helper functions
-        void QByteArrayToUCharArray(QByteArray src, unsigned char *dest);
-        QByteArray UCharArrayToQByteArray(unsigned char *src, int p_size);
-        QByteArray RemovePadding(QByteArray input);
-        QByteArray AddPadding(QByteArray input);
-        QByteArray GenerateRandomBytes(int length);
+    // Encryption functions
+    aes_result aes_set_key(const unsigned char key[], int keylen, aes_context ctx[1] );
+    aes_result aes_encrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
+    aes_result aes_decrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
+    aes_result aes_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
+    aes_result aes_cbc_decrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
 
-        // Encryption functions
-        aes_result aes_set_key(const unsigned char key[], int keylen, aes_context ctx[1] );
-        aes_result aes_encrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
-        aes_result aes_decrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
-        aes_result aes_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
-        aes_result aes_cbc_decrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
-
-        // Helper functions
-        void xor_block( void *d, const void *s );
-        void copy_and_key( void *d, const void *s, const void *k );
-        void add_round_key( uint_8t d[N_BLOCK], const uint_8t k[N_BLOCK] );
-        void shift_sub_rows( uint_8t st[N_BLOCK] );
-        void inv_shift_sub_rows( uint_8t st[N_BLOCK] );
-        void mix_sub_columns( uint_8t dt[N_BLOCK] );
-        void inv_mix_sub_columns( uint_8t dt[N_BLOCK] );
+    // Helper functions
+    void xor_block( void *d, const void *s );
+    void copy_and_key( void *d, const void *s, const void *k );
+    void add_round_key( uint_8t d[N_BLOCK], const uint_8t k[N_BLOCK] );
+    void shift_sub_rows( uint_8t st[N_BLOCK] );
+    void inv_shift_sub_rows( uint_8t st[N_BLOCK] );
+    void mix_sub_columns( uint_8t dt[N_BLOCK] );
+    void inv_mix_sub_columns( uint_8t dt[N_BLOCK] );
 };
 
 #endif // AES_H

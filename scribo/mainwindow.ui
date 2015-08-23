@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
+    <width>751</width>
     <height>300</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>631</width>
+      <width>731</width>
       <height>221</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>654</width>
+     <width>751</width>
      <height>22</height>
     </rect>
    </property>
@@ -56,6 +56,9 @@
     <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionEncrypt"/>
+    <addaction name="actionDecrypt"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -125,6 +128,9 @@
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionEncrypt"/>
+   <addaction name="actionDecrypt"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -359,6 +365,24 @@
    </property>
    <property name="text">
     <string>Font</string>
+   </property>
+  </action>
+  <action name="actionEncrypt">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/encryption.png</normaloff>:/img/encryption.png</iconset>
+   </property>
+   <property name="text">
+    <string>Encrypt</string>
+   </property>
+  </action>
+  <action name="actionDecrypt">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/decryption.png</normaloff>:/img/decryption.png</iconset>
+   </property>
+   <property name="text">
+    <string>Decrypt</string>
    </property>
   </action>
  </widget>

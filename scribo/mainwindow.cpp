@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "preference.h"
 #include "aes.h"
+#include "regex.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     preference = new Preference();
     connect(preference, SIGNAL(preferencesChanged()), this, SLOT(updatePreferences()));
+    connect(this, SIGNAL(backgroundChanged()), this, SLOT(updatePreferences()));
 }
 
 MainWindow::~MainWindow()
@@ -229,8 +231,15 @@ void MainWindow::on_actionBackground_triggered()
 {
     QPalette* palette = new QPalette();
     color = QColorDialog::getColor(Qt::white, this);
-    palette->setColor(QPalette::Base, color);
-    ui->textEdit_mainWindow_surface->setPalette(*palette);
+
+    QSettings setting("rk", "scribo");
+    setting.beginGroup("writing");
+    setting.setValue( "red", color.red() );
+    setting.setValue( "green", color.green() );
+    setting.setValue( "blue", color.blue() );
+    setting.endGroup();
+
+    emit backgroundChanged();
 }
 
 void MainWindow::on_actionFont_2_triggered()
@@ -251,10 +260,97 @@ void MainWindow::updatePreferences()
 {
     QSettings setting("rk", "scribo");
     setting.beginGroup("writing");
-    QString style = "#textEdit_mainWindow_surface { margin: 0 "+
+
+    QString style = "#textEdit_mainWindow_surface { margin: " +
+            setting.value("marginTop", 0).toString() +
+            " " +
             setting.value("marginRight", 0).toString() +
-            " 0 " +
-            setting.value("marginLeft", 0).toString() + "; }";
+            " " +
+            setting.value("marginBottom", 0).toString() +
+            " " +
+            setting.value("marginLeft", 0).toString() + "; " +
+            "padding: " +
+            setting.value("paddingTop", 0).toString() +
+            " " +
+            setting.value("paddingRight", 0).toString() +
+            " " +
+            setting.value("paddingBottom", 0).toString() +
+            " " +
+            setting.value("paddingLeft", 0).toString() +
+            "; background: " +
+            "rgb(" +
+                setting.value("red", 255).toString() + "," +
+                setting.value("green", 255).toString() + "," +
+                setting.value("blue", 255).toString() + "); " +
+            "}";
     ui->textEdit_mainWindow_surface->setStyleSheet(style);
     setting.endGroup();
+}
+
+void MainWindow::on_actionEncrypt_triggered()
+{
+    bool ok;
+    QInputDialog* inputDialog = new QInputDialog();
+    inputDialog->setOptions(QInputDialog::NoButtons);
+
+    QString password = inputDialog->getText(NULL ,"Encryption",
+                                              "Password:", QLineEdit::Password,
+                                              "", &ok);
+
+    Regex regex;
+    QRegExp rePassword( regex.getPassword() );
+
+    if ( ok && !password.isEmpty() && password.contains(rePassword) )
+    {
+        AES crypto;
+
+        QString hashedPassword = QString( QCryptographicHash::hash(( password.toUtf8() ),QCryptographicHash::Md5).toHex() );
+
+        QByteArray key = crypto.hexStringToByte(hashedPassword);
+        QByteArray data = ui->textEdit_mainWindow_surface->toHtml().toUtf8();
+
+        QByteArray encrypted = crypto.encrypt(data, key);
+
+        ui->textEdit_mainWindow_surface->setPlainText( encrypted.toBase64() );
+    } else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("An error has ocurred. Please revise your entries and note the following:\n"
+                                                    "A Password must contain at least one upper case letter.\n"
+                                                    "A Password must contain at least one lower case letter.\n"
+                                                    "A Password must contain at least one numeric digit."));
+    }
+}
+
+void MainWindow::on_actionDecrypt_triggered()
+{
+    bool ok;
+    QInputDialog* inputDialog = new QInputDialog();
+    inputDialog->setOptions(QInputDialog::NoButtons);
+
+    QString password = inputDialog->getText(NULL ,"Decryption",
+                                              "Password:", QLineEdit::Password,
+                                              "", &ok);
+
+    Regex regex;
+    QRegExp rePassword( regex.getPassword() );
+
+    if ( ok && !password.isEmpty() && password.contains(rePassword) )
+    {
+        AES crypto;
+
+        QString hashedPassword = QString(QCryptographicHash::hash( (password.toUtf8() ),QCryptographicHash::Md5).toHex() );
+
+        QByteArray key = crypto.hexStringToByte(hashedPassword);
+        QByteArray data = ui->textEdit_mainWindow_surface->toPlainText().toUtf8();
+
+        QByteArray decrypted = crypto.decrypt(QByteArray::fromBase64(data), key);
+
+        ui->textEdit_mainWindow_surface->setHtml( QString(decrypted) );
+    } else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("An error has ocurred. Please revise your entries and note the following:\n"
+                                                    "A Password must contain at least one upper case letter.\n"
+                                                    "A Password must contain at least one lower case letter.\n"
+                                                    "A Password must contain at least one numeric digit."));
+    }
 }

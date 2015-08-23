@@ -54,138 +54,186 @@ AES::AES()
 }
 
 // Encryption with IV
-QByteArray AES::Encrypt(QByteArray p_input, QByteArray p_key)
+QByteArray AES::encrypt(QByteArray p_input, QByteArray p_key)
 {
+    if (p_input.isEmpty()) {
+        qDebug() << "AES::encrypt(..): Cannot encrypt empty input";
+        return QByteArray();
+    }
+
     QByteArray iv = QUuid::createUuid().toRfc4122();
-    QByteArray input = p_input.prepend(iv);
-    return Encrypt(input, p_key, iv);
+    return encrypt(p_input, p_key, iv);
 }
 
-QByteArray AES::Decrypt(QByteArray p_input, QByteArray p_key)
+QByteArray AES::decrypt(QByteArray p_input, QByteArray p_key)
 {
+    if (p_input.isEmpty()) {
+        qDebug() << "AES::decrypt(..): Cannot decrypt empty input";
+        return QByteArray();
+    }
     QByteArray iv = p_input.left(16);
     QByteArray input = p_input.remove(0, 16);
-    return Decrypt(input, p_key, iv);
+    return decrypt(input, p_key, iv);
 }
 
-// Basic encryption
-QByteArray AES::Encrypt(QByteArray p_input, QByteArray p_key, QByteArray p_iv)
+QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
+    if (b_input.isEmpty()) {
+        qDebug() << "AES::encrypt(...): Cannot encrypt empty input";
+        return QByteArray();
+    }
+
+    addPadding(&b_input);
+
+    QByteArray result;
+
     int keySize = p_key.size();
     int ivSize = p_iv.size();
 
-    if (keySize != 16 && keySize != 24 && keySize != 32)
+    if (keySize != 16 && keySize != 24 && keySize != 32) {
+        qDebug() << "AES::encrypt(): Invalid keysize";
         return QByteArray();
+    }
 
-    if (ivSize != 16)
+    if (ivSize != 16) {
+        qDebug() << "AES::encrypt(): Invalid keysize";
         return QByteArray();
+    }
 
-    // add padding
-    QByteArray input = AddPadding(p_input);
-    int inputSize = input.size();
+    // Chunks have to stay < 1MB (1.050MB to be exactly)
+    qint64 chunksCount = (b_input.size()/500000) + 1;
 
-    unsigned char key[keySize];
-    QByteArrayToUCharArray(p_key, key);
+    for (int part = 0; part < chunksCount; part++) {
+        // Out of range checks
+        if (part*500000 > b_input.size()) {
+            qDebug() << "AES::encrypt(): Skipped: Buffer overflow";
+            continue;
+        }
 
-    unsigned char iv[ivSize];
-    QByteArrayToUCharArray(p_iv, iv);
+        QByteArray p_chunk = b_input.mid(part*500000, 500000);
+        int inputSize = p_chunk.size();
 
-    unsigned char decrypted[inputSize];
-    QByteArrayToUCharArray(input, decrypted);
+        unsigned char key[keySize];
+        qByteArrayToUCharArray(p_key, key);
 
-    unsigned char encrypted[inputSize]; // encrypted text
+        unsigned char iv[ivSize];
+        qByteArrayToUCharArray(p_iv, iv);
 
-    aes_context context;
-    aes_set_key(key, keySize * 8, &context);
-    aes_cbc_encrypt(decrypted, encrypted, inputSize, iv, &context);
+        unsigned char decrypted[inputSize];
+        qByteArrayToUCharArray(p_chunk, decrypted);
 
-    QByteArray result = UCharArrayToQByteArray(encrypted, inputSize);
+        unsigned char encrypted[inputSize]; // Encrypted text
+
+        aes_context context;
+        aes_set_key(key, keySize * 8, &context);
+        aes_cbc_encrypt(decrypted, encrypted, inputSize, iv, &context);
+
+        result.append( uCharArrayToQByteArray(encrypted, inputSize));
+    }
+
+    result.prepend(p_iv);
     return result;
 }
 
-QByteArray AES::Decrypt(QByteArray p_input, QByteArray p_key, QByteArray p_iv)
+QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
-    int inputSize = p_input.size();
+    if (b_input.isEmpty()) {
+        qDebug() << "AES::decrypt(...): Cannot decrypt empty input";
+        return QByteArray();
+    }
+
+    QByteArray result;
+
     int keySize = p_key.size();
     int ivSize = p_iv.size();
 
-    if (keySize != 16 && keySize != 24 && keySize != 32)
+    if (keySize != 16 && keySize != 24 && keySize != 32) {
+        qDebug() << "AES::encrypt(): Invalid keysize";
         return QByteArray();
+    }
 
-    if (ivSize != 16)
+    if (ivSize != 16) {
+        qDebug() << "AES::encrypt(): Invalid keysize";
         return QByteArray();
+    }
 
-    unsigned char key[keySize];
-    QByteArrayToUCharArray(p_key, key);
+    // 500KB blocks
+    qint64 chunksCount = (b_input.size()/500000) + 1;
 
-    unsigned char iv[ivSize];
-    QByteArrayToUCharArray(p_iv, iv);
+    for (int part = 0; part < chunksCount; part++) {
+        // Out of range checks
+        if (part*500000 > b_input.size()) {
+            qDebug() << "AES::encrypt(): Skipped: Buffer overflow";
+            continue;
+        }
 
-    unsigned char encrypted[inputSize];
-    QByteArrayToUCharArray(p_input, encrypted);
+        QByteArray p_chunk = b_input.mid(part*500000, 500000);
 
-    unsigned char decrypted[inputSize]; // decrypted text
+        int inputSize = p_chunk.size();
 
-    aes_context context;
-    aes_set_key(key, keySize * 8, &context);
-    aes_cbc_decrypt(encrypted, decrypted, inputSize, iv, &context);
+        unsigned char key[keySize];
+        qByteArrayToUCharArray(p_key, key);
 
-    QByteArray result = RemovePadding(UCharArrayToQByteArray(decrypted, inputSize));
+        unsigned char iv[ivSize];
+        qByteArrayToUCharArray(p_iv, iv);
+
+        unsigned char encrypted[inputSize];
+        qByteArrayToUCharArray(p_chunk, encrypted);
+
+        unsigned char decrypted[inputSize]; // Decrypted text
+
+        aes_context context;
+        aes_set_key(key, keySize * 8, &context);
+        aes_cbc_decrypt(encrypted, decrypted, inputSize, iv, &context);
+
+        QByteArray temp_result = uCharArrayToQByteArray(decrypted, inputSize);
+
+        result.append( temp_result);
+    }
+
+    removePadding(&result);
     return result;
 }
+
 
 // Helper functions
-QByteArray AES::HexStringToByte(QString key)
-{
+QByteArray AES::hexStringToByte(QString key) {
     return QByteArray::fromHex(QString(key).toLatin1());
 }
 
-void AES::QByteArrayToUCharArray(QByteArray src, unsigned char *dest)
-{
-    for (int i = 0; i < src.size(); i++)
-    {
+void AES::qByteArrayToUCharArray(QByteArray src, unsigned char *dest) {
+    for (int i = 0; i < src.size(); i++) {
         dest[i] = src.at(i);
     }
 }
 
-QByteArray AES::UCharArrayToQByteArray(unsigned char *src, int p_size)
-{
+QByteArray AES::uCharArrayToQByteArray(unsigned char *src, int p_size) {
     QByteArray array((char*)src, p_size);
     return array;
 }
 
-// pkcs#7 padding
-QByteArray AES::RemovePadding(QByteArray input)
-{
-    int padding = input.at(input.size() - 1);
+// PKCS#7 padding
+void AES::removePadding(QByteArray *input) {
+    int padding = input->at(input->size() - 1);
 
-    for(int i = 0; i < padding; i++)
-    {
-        if (input.at(input.size() - 1) == padding)
-        {
-            input.chop(1);
+    for(int i = 0; i < padding; i++) {
+        if (input->at(input->size() - 1) == padding) {
+            input->chop(1);
         }
     }
-
-    return input;
 }
 
-QByteArray AES::AddPadding(QByteArray input)
-{
-    int size = input.size();
+void AES::addPadding(QByteArray* input) {
+    int size = input->size();
     int padding = 16 - (size % 16);
 
-    for(int i = 0; i < padding; i++)
-    {
-        input.append(padding);
+    for(int i = 0; i < padding; i++) {
+        input->append(padding);
     }
-
-    return input;
 }
 
 // Algorithm
-void AES::xor_block( void *d, const void *s )
-{
+void AES::xor_block( void *d, const void *s ) {
     ((uint_32t*)d)[ 0] ^= ((uint_32t*)s)[ 0];
     ((uint_32t*)d)[ 1] ^= ((uint_32t*)s)[ 1];
     ((uint_32t*)d)[ 2] ^= ((uint_32t*)s)[ 2];
