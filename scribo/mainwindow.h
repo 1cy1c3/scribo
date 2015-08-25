@@ -9,6 +9,8 @@
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QInputDialog>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 class Preference;
 
@@ -92,8 +94,27 @@ private:
     QTextCursor cursor;
     QColor color;
     QFont font;
+    QSqlQuery query;
+    QString password;
+    QByteArray encrypted;
+    QByteArray decrypted;
+    bool passwordUsed;
     Preference *preference;
+    /**
+     * @brief Database object for the access to the database
+     */
+    QSqlDatabase db;
+    /**
+     * @brief Name of the database
+     */
+    QString name;
+    /**
+     * @brief Driver of the database
+     */
+    QString driver;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
+    QByteArray encrypt (QString password);
+    QByteArray decrypt (QString password);
 };
 
 #endif // MAINWINDOW_H

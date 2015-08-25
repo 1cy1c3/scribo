@@ -5,6 +5,9 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QDebug>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 #include "mainwindow.h"
 
 namespace Ui {
@@ -23,17 +26,16 @@ signals:
     void preferencesChanged(); // const QString &name
 
 private slots:
-    void on_buttonBox_accepted();
-
-    void on_buttonBox_rejected();
+    void on_pushButton_preference_save_clicked();
+    void on_pushButton_preference_cancel_clicked();
 
 private:
     Ui::Preference *ui;
+    QSqlDatabase db;
+    QSqlQuery query;
     void savePreferences();
     void loadPreferences();
     bool checkPreferences();
-    void accept();
-    void reject();
 };
 
 #endif // PREFERENCE_H
