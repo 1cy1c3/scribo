@@ -11,6 +11,8 @@
 #include <QInputDialog>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QPrinter>
+#include <QPrintDialog>
 
 class Preference;
 
@@ -89,6 +91,8 @@ private slots:
     void on_actionDecrypt_triggered();
 
     void on_actionImage_triggered();
+
+    void on_actionPrint_triggered();
 
 private:
     Ui::MainWindow *ui;

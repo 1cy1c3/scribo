@@ -26,5 +26,6 @@
         <file>img/decryption.png</file>
         <file>img/encryption.png</file>
         <file>img/image.png</file>
+        <file>img/printer.png</file>
     </qresource>
 </RCC>

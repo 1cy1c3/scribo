@@ -269,6 +269,9 @@ void MainWindow::on_actionFont_2_triggered()
         QTextCharFormat textCharFormat = cursor.charFormat();
         textCharFormat.setFont(font);
         cursor.setCharFormat(textCharFormat);
+
+        ui->textEdit_mainWindow_surface->setFontPointSize( font.pointSizeF() );
+        ui->textEdit_mainWindow_surface->setFontFamily( font.family() );
     }
 }
 
@@ -490,4 +493,14 @@ void MainWindow::on_actionImage_triggered()
     imageFormat.setHeight( image.height() );
     imageFormat.setName( Uri.toString() );
     cursor.insertImage(imageFormat);
+}
+
+void MainWindow::on_actionPrint_triggered()
+{
+    QPrinter *printer;
+    QPrintDialog pd(this);
+    if (pd.exec() == QDialog::Rejected)
+        return;
+    printer = pd.printer();
+    ui->textEdit_mainWindow_surface->print(printer);
 }
