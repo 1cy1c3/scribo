@@ -44,7 +44,7 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(), "text files (*.txt)");
+    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(), "text files (*.sb)");
 
     if ( !file.isEmpty() )
     {
@@ -84,7 +84,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::currentPath(), "text files (*.txt)");
+    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::currentPath(), "text files (*.sb)");
 
     if ( !file.isEmpty() )
     {
@@ -460,4 +460,34 @@ QByteArray MainWindow::decrypt(QString password)
     QByteArray decrypted = crypto.decrypt(data, key);
 
     return decrypted;
+}
+
+void MainWindow::on_actionImage_triggered()
+{
+    QString scriboDir = QDir::home().absolutePath() + "/scribo";
+
+    if ( !QDir(scriboDir).exists() )
+        QDir().mkdir(scriboDir);
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Select an image",
+                                      QDir::currentPath(), "Bitmap Files (*.bmp)\n"
+                                        "JPEG (*.jpg *jpeg)\n"
+                                        "GIF (*.gif)\n"
+                                        "PNG (*.png)");
+    QStringList list = filePath.split( "/" );
+    QString imageName = list.value(list.length() - 1 );
+    QString imagePath = scriboDir + "/" + imageName;
+
+    QFile::copy(filePath, imagePath);
+    QUrl Uri ( QString ( "file://%1" ).arg ( imagePath ) );
+    QImage image = QImageReader ( imagePath ).read();
+
+    QTextDocument * textDocument = ui->textEdit_mainWindow_surface->document();
+    textDocument->addResource( QTextDocument::ImageResource, Uri, QVariant ( image ) );
+    cursor = ui->textEdit_mainWindow_surface->textCursor();
+    QTextImageFormat imageFormat;
+    imageFormat.setWidth( image.width() );
+    imageFormat.setHeight( image.height() );
+    imageFormat.setName( Uri.toString() );
+    cursor.insertImage(imageFormat);
 }

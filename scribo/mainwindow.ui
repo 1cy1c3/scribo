@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
+    <width>809</width>
     <height>502</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>711</width>
+      <width>771</width>
       <height>381</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>751</width>
+     <width>809</width>
      <height>22</height>
     </rect>
    </property>
@@ -100,8 +100,15 @@
     <addaction name="actionAlign_text_right"/>
     <addaction name="actionJustification"/>
    </widget>
+   <widget class="QMenu" name="menuInsert">
+    <property name="title">
+     <string>Insert</string>
+    </property>
+    <addaction name="actionImage"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuInsert"/>
    <addaction name="menuFormat"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -129,6 +136,8 @@
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
    <addaction name="separator"/>
+   <addaction name="actionImage"/>
+   <addaction name="separator"/>
    <addaction name="actionEncrypt"/>
    <addaction name="actionDecrypt"/>
   </widget>
@@ -141,6 +150,9 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="icon">
@@ -150,6 +162,9 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="icon">
@@ -158,6 +173,9 @@
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionSave_As">
@@ -383,6 +401,15 @@
    </property>
    <property name="text">
     <string>Decrypt</string>
+   </property>
+  </action>
+  <action name="actionImage">
+   <property name="icon">
+    <iconset resource="app.qrc">
+     <normaloff>:/img/image.png</normaloff>:/img/image.png</iconset>
+   </property>
+   <property name="text">
+    <string>Image</string>
    </property>
   </action>
  </widget>

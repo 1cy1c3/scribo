@@ -88,6 +88,8 @@ private slots:
 
     void on_actionDecrypt_triggered();
 
+    void on_actionImage_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString fileName;
