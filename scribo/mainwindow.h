@@ -14,6 +14,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QAction>
+#include <QMimeData>
 
 class Preference;
 
@@ -31,6 +32,12 @@ public:
 
 signals:
     void backgroundChanged();
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private slots:
     void on_actionNew_triggered();
@@ -123,6 +130,7 @@ private:
     QByteArray encrypt(QString password);
     QByteArray decrypt(QString password);
     void addContextMenu();
+    QString getFileContent(QString file);
 };
 
 #endif // MAINWINDOW_H

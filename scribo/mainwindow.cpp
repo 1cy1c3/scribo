@@ -30,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     addContextMenu();
 
+    ui->textEdit_mainWindow_surface->setAcceptDrops(false);
+    setAcceptDrops(true);
+
     connect(this, SIGNAL(backgroundChanged()), this, SLOT(updatePreferences()));
 }
 
@@ -46,21 +49,14 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::currentPath(), "text files (*.sb)");
-
-    if ( !file.isEmpty() )
-    {
-        QFile sFile(file);
-        if (sFile.open(QFile::ReadOnly | QFile::Text) )
-        {
-            fileName = file;
-            QTextStream in(&sFile);
-            QString text = in.readAll();
-            sFile.close();
-
-            ui->textEdit_mainWindow_surface->setHtml(text);
-        }
+    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::home().absolutePath(), "text files (*.sb)");
+    if ( !file.isEmpty() ) {
+        QString text = getFileContent(file);
+        ui->textEdit_mainWindow_surface->setHtml(text);
+    } else {
+        return;
     }
+
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -86,7 +82,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::currentPath(), "text files (*.sb)");
+    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::home().absolutePath(), "text files (*.sb)");
 
     if ( !file.isEmpty() )
     {
@@ -469,19 +465,19 @@ QByteArray MainWindow::decrypt(QString password)
 
 void MainWindow::on_actionImage_triggered()
 {
-    QString scriboDir = QDir::home().absolutePath() + "/scribo";
+    QString scriboDir = QDir::home().absolutePath() + QDir::separator() + "scribo";
 
-    if ( !QDir(scriboDir).exists() )
-        QDir().mkdir(scriboDir);
+    if ( !QDir(scriboDir + QDir::separator() + "img").exists() )
+        QDir().mkdir(scriboDir + QDir::separator() + "img");
 
     QString filePath = QFileDialog::getOpenFileName(this, "Select an image",
-                                      QDir::currentPath(), "Bitmap Files (*.bmp)\n"
+                                      QDir::home().absolutePath(), "Bitmap Files (*.bmp)\n"
                                         "JPEG (*.jpg *jpeg)\n"
                                         "GIF (*.gif)\n"
                                         "PNG (*.png)");
     QStringList list = filePath.split( "/" );
     QString imageName = list.value(list.length() - 1 );
-    QString imagePath = scriboDir + "/" + imageName;
+    QString imagePath = scriboDir + QDir::separator() + "img" + QDir::separator() + imageName;
 
     QFile::copy(filePath, imagePath);
     QUrl Uri ( QString ( "file://%1" ).arg ( imagePath ) );
@@ -526,4 +522,66 @@ void MainWindow::addContextMenu()
     ui->textEdit_mainWindow_surface->addAction(paste);
     ui->textEdit_mainWindow_surface->addAction(font);
     ui->textEdit_mainWindow_surface->addAction(color);
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    if ( !ui->textEdit_mainWindow_surface->toHtml().isEmpty() ) {
+        QMessageBox::StandardButton reply;
+          reply = QMessageBox::question(this, "Confirmation", "The content is not empty. Are you sure?",
+                                        QMessageBox::Yes|QMessageBox::No);
+          if (reply == QMessageBox::Yes) {
+              QString file;
+              QList<QUrl> urls;
+              QList<QUrl>::Iterator i;
+              urls = event->mimeData()->urls();
+              for (i = urls.begin(); i != urls.end(); ++i)
+              {
+                  file = i->toLocalFile();
+                  QString text = getFileContent(file);
+                  ui->textEdit_mainWindow_surface->setHtml(text);
+              }
+          } else {
+            return;
+          }
+    }
+}
+
+QString MainWindow::getFileContent(QString file)
+{
+    QStringList list = file.split( "/" );
+    QString fileName = list.value(list.length() - 1 );
+    QStringList list2 = fileName.split( "." );
+    QString fileFormat = list2.value(list2.length() - 1);
+
+    if ( !fileFormat.contains("sb") ) {
+        QMessageBox::critical(this, tr("Error"), tr("There are only formats like 'sb' and 'txt' allowed."));
+        return ui->textEdit_mainWindow_surface->toHtml();
+    }
+
+    QString text = "";
+    QFile sFile(file);
+    if (sFile.open(QFile::ReadOnly | QFile::Text) )
+    {
+        fileName = file;
+        QTextStream in(&sFile);
+        text = in.readAll();
+        sFile.close();
+    }
+    return text;
 }

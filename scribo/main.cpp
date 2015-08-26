@@ -4,6 +4,11 @@
 
 int main(int argc, char *argv[])
 {
+    QString scriboDir = QDir::home().absolutePath() + QDir::separator() + "scribo";
+
+    if ( !QDir(scriboDir).exists() )
+        QDir().mkdir(scriboDir);
+
     Database db;
 
     if ( !db.open() ) {

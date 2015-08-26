@@ -301,9 +301,6 @@
    <property name="text">
     <string>Normal</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
   </action>
   <action name="actionItalic">
    <property name="icon">

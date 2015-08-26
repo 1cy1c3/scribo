@@ -24,7 +24,7 @@ QString Database::name = "scribo.db";
 Database::Database()
 {
     db = QSqlDatabase::addDatabase(driver);
-    db.setDatabaseName(name);
+    db.setDatabaseName(QDir::homePath() + QDir::separator() + "scribo" + QDir::separator() + name);
 }
 
 /**
