@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << query.lastError();
     }
 
+    addContextMenu();
+
     connect(this, SIGNAL(backgroundChanged()), this, SLOT(updatePreferences()));
 }
 
@@ -503,4 +505,25 @@ void MainWindow::on_actionPrint_triggered()
         return;
     printer = pd.printer();
     ui->textEdit_mainWindow_surface->print(printer);
+}
+
+void MainWindow::addContextMenu()
+{
+    QAction *copy, *cut, *paste, *font, *color;
+    copy = new QAction("Copy", this);
+    cut = new QAction("Cut", this);
+    paste = new QAction("Paste", this);
+    font = new QAction("Font", this);
+    color = new QAction("Color", this);
+    connect(copy, SIGNAL(triggered()), this, SLOT(on_actionCopy_triggered()));
+    connect(cut, SIGNAL(triggered()), this, SLOT(on_actionCut_triggered()));
+    connect(paste, SIGNAL(triggered()), this, SLOT(on_actionPaste_triggered()));
+    connect(font, SIGNAL(triggered()), this, SLOT(on_actionFont_2_triggered()));
+    connect(color, SIGNAL(triggered()), this, SLOT(on_actionFont_triggered()));
+    ui->textEdit_mainWindow_surface->setContextMenuPolicy(Qt::ActionsContextMenu);
+    ui->textEdit_mainWindow_surface->addAction(copy);
+    ui->textEdit_mainWindow_surface->addAction(cut);
+    ui->textEdit_mainWindow_surface->addAction(paste);
+    ui->textEdit_mainWindow_surface->addAction(font);
+    ui->textEdit_mainWindow_surface->addAction(color);
 }

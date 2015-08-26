@@ -13,6 +13,7 @@
 #include <QSqlQuery>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QAction>
 
 class Preference;
 
@@ -119,8 +120,9 @@ private:
      */
     QString driver;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
-    QByteArray encrypt (QString password);
-    QByteArray decrypt (QString password);
+    QByteArray encrypt(QString password);
+    QByteArray decrypt(QString password);
+    void addContextMenu();
 };
 
 #endif // MAINWINDOW_H
