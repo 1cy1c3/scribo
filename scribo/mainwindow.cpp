@@ -4,6 +4,7 @@
 #include "aes.h"
 #include "regex.h"
 #include "database.h"
+#include "about.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -136,7 +137,9 @@ void MainWindow::on_actionCheck_for_updates_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-
+    About about;
+    about.setModal(true);
+    about.exec();
 }
 
 void MainWindow::on_actionSettings_triggered()
@@ -151,7 +154,18 @@ void MainWindow::on_actionSettings_triggered()
 
 void MainWindow::on_actionClose_triggered()
 {
-    QApplication::quit();
+    if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Confirmation", "The content is not empty. Are you sure?",
+                                      QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            QApplication::quit();
+        } else {
+          return;
+        }
+    } else {
+        QApplication::quit();
+    }
 }
 
 void MainWindow::on_actionNormal_triggered()
@@ -541,7 +555,7 @@ void MainWindow::dragMoveEvent(QDragMoveEvent *event)
 
 void MainWindow::dropEvent(QDropEvent *event)
 {
-    if ( !ui->textEdit_mainWindow_surface->toHtml().isEmpty() ) {
+    if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
         QMessageBox::StandardButton reply;
           reply = QMessageBox::question(this, "Confirmation", "The content is not empty. Are you sure?",
                                         QMessageBox::Yes|QMessageBox::No);
@@ -559,6 +573,17 @@ void MainWindow::dropEvent(QDropEvent *event)
           } else {
             return;
           }
+    } else {
+        QString file;
+        QList<QUrl> urls;
+        QList<QUrl>::Iterator i;
+        urls = event->mimeData()->urls();
+        for (i = urls.begin(); i != urls.end(); ++i)
+        {
+            file = i->toLocalFile();
+            QString text = getFileContent(file);
+            ui->textEdit_mainWindow_surface->setHtml(text);
+        }
     }
 }
 

@@ -18,16 +18,19 @@ SOURCES += main.cpp\
     preference.cpp \
     aes.cpp \
     regex.cpp \
-    database.cpp
+    database.cpp \
+    about.cpp
 
 HEADERS  += mainwindow.h \
     preference.h \
     aes.h \
     regex.h \
-    database.h
+    database.h \
+    about.h
 
 FORMS    += mainwindow.ui \
-    preference.ui
+    preference.ui \
+    about.ui
 
 RESOURCES += \
     app.qrc
