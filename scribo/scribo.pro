@@ -6,11 +6,12 @@
 
 QT       += core gui sql printsupport
 
+ICON = scribo.icns
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = scribo
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \
