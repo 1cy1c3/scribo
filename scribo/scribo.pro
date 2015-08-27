@@ -7,6 +7,7 @@
 QT       += core gui sql printsupport
 
 ICON = scribo.icns
+RC_ICONS = scribo.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
