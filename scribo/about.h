@@ -20,9 +20,8 @@ private slots:
 
 private:
     Ui::About *ui;
-    QString program;
-    QString version;
-    QString author;
+    static QString version;
+    static QString author;
 };
 
 #endif // ABOUT_H

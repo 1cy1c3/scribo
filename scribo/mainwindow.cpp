@@ -5,6 +5,7 @@
 #include "regex.h"
 #include "database.h"
 #include "about.h"
+#include "help.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -127,7 +128,9 @@ void MainWindow::on_actionPaste_triggered()
 
 void MainWindow::on_actionScribo_Help_triggered()
 {
-
+    Help help;
+    help.setModal(true);
+    help.exec();
 }
 
 void MainWindow::on_actionCheck_for_updates_triggered()

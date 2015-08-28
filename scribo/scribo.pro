@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql printsupport
+VERSION = 0.1
+
+QT       += core gui sql printsupport multimedia multimediawidgets
 
 ICON = scribo.icns
 RC_ICONS = scribo.ico
@@ -20,14 +22,16 @@ SOURCES += main.cpp\
     aes.cpp \
     regex.cpp \
     database.cpp \
-    about.cpp
+    about.cpp \
+    help.cpp
 
 HEADERS  += mainwindow.h \
     preference.h \
     aes.h \
     regex.h \
     database.h \
-    about.h
+    about.h \
+    help.h
 
 FORMS    += mainwindow.ui \
     preference.ui \
@@ -38,3 +42,15 @@ RESOURCES += \
 
 DISTFILES += \
     conf/scribo.db
+
+mac {
+    Resources.files = ./video
+    Resources.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += Resources
+}
+
+win32 {
+    Resources.files = ./video
+    Resources.path = .
+    QMAKE_BUNDLE_DATA += Resources
+}

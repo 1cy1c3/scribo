@@ -1,3 +1,10 @@
+#ifdef OSX
+#ifdef WIN
+#error "Error: It is only allowed to compile the code for one operating system."
+#endif
+#endif
+
+
 #include "mainwindow.h"
 #include "database.h"
 #include <QApplication>
@@ -17,6 +24,9 @@ int main(int argc, char *argv[])
 
     splash->showMessage(QObject::tr("Loading modules..."),
                                topRight, Qt::white);
+
+    QCoreApplication::setApplicationName("Scribo");
+    QCoreApplication::setApplicationVersion("0.1");
 
     QString scriboDir = QDir::home().absolutePath() + QDir::separator() + "scribo";
 

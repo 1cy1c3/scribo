@@ -29,5 +29,8 @@
         <file>img/printer.png</file>
         <file>img/splash.jpg</file>
         <file>img/banner.jpg</file>
+        <file>img/pause.png</file>
+        <file>img/play.png</file>
+        <file>img/stop.png</file>
     </qresource>
 </RCC>
