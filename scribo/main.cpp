@@ -36,6 +36,43 @@
 #include <QSplashScreen>
 #include <QTimer>
 
+// If defined, the messages are logged in a file
+#define LOGFILE
+
+#ifdef LOGFILE
+#define MY_ASSERT(c) if (c == false) ;
+#define MY_ASSERT_X(c, where, what) if (c == false) ;
+
+/**
+ * Register a message handler for a better logging in a logfile.
+ *
+ * @param type Message type like WARNING or CRITICAL.
+ * @param context Context for logging.
+ * @param msg Message respectively a log text.
+ */
+void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QFile file(QDate::currentDate().toString("dd_MM_yyyy.log"));
+
+    MY_ASSERT(file.open(QIODevice::Append | QIODevice::Text));
+
+    QTextStream out(&file);
+    out << QTime::currentTime().toString("hh:mm:ss.zzz ");
+
+    switch (type)
+    {
+    case QtDebugMsg:	out << "DBG"; break;
+    case QtWarningMsg:  out << "WRN"; break;
+    case QtCriticalMsg: out << "CRT"; break;
+    case QtFatalMsg:    out << "FTL"; break;
+    }
+
+    out << " " << msg << '\n';
+    out.flush();
+}
+
+#endif
+
 /**
  * Start point of the program which executes the main window.
  * @param argc Slots of command line parameter.
@@ -44,6 +81,10 @@
  */
 int main(int argc, char *argv[])
 {
+    #ifdef LOGFILE
+        qInstallMessageHandler(messageOutput);
+    #endif
+
     QApplication a(argc, argv);
 
     QSplashScreen *splash = new QSplashScreen;
@@ -82,6 +123,8 @@ int main(int argc, char *argv[])
     QTimer::singleShot(3000, splash, SLOT(close()));
     QTimer::singleShot(3000, &w, SLOT(show()));
     //w.show();
+
+    qDebug() << "Application started...";
 
     return a.exec();
 }

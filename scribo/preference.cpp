@@ -114,6 +114,7 @@ void Preference::on_pushButton_preference_save_clicked()
 {
     if ( checkPreferences() ) {
         savePreferences();
+        qDebug() << "The settings have been saved successfully.";
         emit preferencesChanged();
         close();
     } else {
@@ -121,6 +122,7 @@ void Preference::on_pushButton_preference_save_clicked()
                                                     "A Password must contain at least one upper case letter.\n"
                                                     "A Password must contain at least one lower case letter.\n"
                                                     "A Password must contain at least one numeric digit."));
+        qDebug() << "Settings could not be saved because the password requirements are incorrect.";
     }
 }
 

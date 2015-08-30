@@ -10,6 +10,8 @@
 #include <QSqlQuery>
 #include <QString>
 #include <QDir>
+#include <QDebug>
+#include <QFile>
 
 /**
  * Realises the database connection.

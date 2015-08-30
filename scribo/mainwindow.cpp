@@ -351,6 +351,7 @@ void MainWindow::on_actionEncrypt_triggered()
                                                         "A Password must contain at least one upper case letter.\n"
                                                         "A Password must contain at least one lower case letter.\n"
                                                         "A Password must contain at least one numeric digit."));
+            qDebug() << "Data could not be encrypted because the password requirements were not met.";
         }
     } else
     {
@@ -380,6 +381,7 @@ void MainWindow::on_actionEncrypt_triggered()
                                                             "A Password must contain at least one upper case letter.\n"
                                                             "A Password must contain at least one lower case letter.\n"
                                                             "A Password must contain at least one numeric digit."));
+                qDebug() << "Data could not be encrypted because the password requirements were not met.";
             }
         } else
         {
@@ -416,6 +418,7 @@ void MainWindow::on_actionDecrypt_triggered()
                                                         "A Password must contain at least one upper case letter.\n"
                                                         "A Password must contain at least one lower case letter.\n"
                                                         "A Password must contain at least one numeric digit."));
+            qDebug() << "Data could not be decrypted because the password requirements were not met.";
         }
     } else
     {
@@ -445,6 +448,7 @@ void MainWindow::on_actionDecrypt_triggered()
                                                             "A Password must contain at least one upper case letter.\n"
                                                             "A Password must contain at least one lower case letter.\n"
                                                             "A Password must contain at least one numeric digit."));
+                qDebug() << "Data could not be decrypted because the password requirements were not met.";
             }
         } else
         {
@@ -602,6 +606,7 @@ QString MainWindow::getFileContent(QString file)
 
     if ( !fileFormat.contains("sb") ) {
         QMessageBox::critical(this, tr("Error"), tr("There are only formats like 'sb' and 'txt' allowed."));
+        qDebug() << "File content could not be loaded because the format is incorrect.";
         return ui->textEdit_mainWindow_surface->toHtml();
     }
 

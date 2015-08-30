@@ -4,8 +4,6 @@
  */
 
 #include "database.h"
-#include <QDebug>
-#include <QFile>
 
 /**
  * Driver of the database

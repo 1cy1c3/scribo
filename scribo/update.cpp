@@ -44,6 +44,7 @@ void Update::displayError(QAbstractSocket::SocketError socketError)
                                      tr("The host was not found. Please check the "
                                         "host name and port settings."));
             ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            qDebug() << "The host was not found.";
             break;
         case QAbstractSocket::ConnectionRefusedError:
             QMessageBox::information(this, tr("Fortune Client"),
@@ -52,12 +53,14 @@ void Update::displayError(QAbstractSocket::SocketError socketError)
                                     "and check that the host name and port "
                                     "settings are correct."));
             ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            qDebug() << "The connection was refused by the peer.";
             break;
         default:
             QMessageBox::information(this, tr("Fortune Client"),
                                  tr("The following error ocurred: %1.")
                                      .arg(clientSocket->errorString()));
             ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            qDebug() << "The following error ocurred: " << clientSocket->errorString();
     }
 }
 
