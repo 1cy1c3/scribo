@@ -50,6 +50,10 @@ private:
      * @brief Port of the server
      */
     static int port;
+    /**
+     * @brief Adress of the host
+     */
+    static QString hostAddress;
 };
 
 #endif // UPDATE_H

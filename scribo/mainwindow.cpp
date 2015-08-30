@@ -52,7 +52,7 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Open Document", QDir::home().absolutePath(), "text files (*.sb)");
+    QString file = QFileDialog::getOpenFileName(this, tr("Open Document"), QDir::home().absolutePath(), "text files (*.sb)");
     if ( !file.isEmpty() ) {
         QString text = getFileContent(file);
         ui->textEdit_mainWindow_surface->setHtml(text);
@@ -85,7 +85,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, "Save Document", QDir::home().absolutePath(), "text files (*.sb)");
+    QString file = QFileDialog::getSaveFileName(this, tr("Save Document"), QDir::home().absolutePath(), "text files (*.sb)");
 
     if ( !file.isEmpty() )
     {
@@ -101,15 +101,7 @@ void MainWindow::on_actionCopy_triggered()
 
 void MainWindow::on_actionCut_triggered()
 {
-    //ui->textEdit_mainWindow_surface->cut();
-    QSettings setting("rk", "scribo");
-    setting.beginGroup("writing");
-    QString style = "#textEdit_mainWindow_surface { margin: 0 "+
-            setting.value("marginLeft", 0).toString() +
-            " 0 " +
-            setting.value("marginRight", 0).toString() + "; }";
-    ui->textEdit_mainWindow_surface->setStyleSheet(style);
-    setting.endGroup();
+    ui->textEdit_mainWindow_surface->cut();
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -162,7 +154,7 @@ void MainWindow::on_actionClose_triggered()
 {
     if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Confirmation", "The content is not empty. Are you sure?",
+        reply = QMessageBox::question(this, tr("Confirmation"), tr("The content is not empty. Are you sure?"),
                                       QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::Yes) {
             QApplication::quit();
@@ -362,8 +354,8 @@ void MainWindow::on_actionEncrypt_triggered()
 
         inputDialog->setOptions(QInputDialog::NoButtons);
 
-        password = inputDialog->getText(NULL ,"Encryption",
-                                                  "Password:", QLineEdit::Password,
+        password = inputDialog->getText(NULL ,tr("Encryption"),
+                                                  tr("Password:"), QLineEdit::Password,
                                                   "", &ok);
 
         if (ok)
@@ -429,8 +421,8 @@ void MainWindow::on_actionDecrypt_triggered()
 
         inputDialog->setOptions(QInputDialog::NoButtons);
 
-        password = inputDialog->getText(NULL ,"Decryption",
-                                                  "Password:", QLineEdit::Password,
+        password = inputDialog->getText(NULL ,tr("Decryption"),
+                                                  tr("Password:"), QLineEdit::Password,
                                                   "", &ok);
 
         if (ok)
@@ -494,7 +486,7 @@ void MainWindow::on_actionImage_triggered()
     if ( !QDir(scriboDir + QDir::separator() + "img").exists() )
         QDir().mkdir(scriboDir + QDir::separator() + "img");
 
-    QString filePath = QFileDialog::getOpenFileName(this, "Select an image",
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Select an image"),
                                       QDir::home().absolutePath(), "Bitmap Files (*.bmp)\n"
                                         "JPEG (*.jpg *jpeg)\n"
                                         "GIF (*.gif)\n"
@@ -567,7 +559,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 {
     if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
         QMessageBox::StandardButton reply;
-          reply = QMessageBox::question(this, "Confirmation", "The content is not empty. Are you sure?",
+          reply = QMessageBox::question(this, tr("Confirmation"), tr("The content is not empty. Are you sure?"),
                                         QMessageBox::Yes|QMessageBox::No);
           if (reply == QMessageBox::Yes) {
               QString file;
@@ -605,7 +597,7 @@ QString MainWindow::getFileContent(QString file)
     QString fileFormat = list2.value(list2.length() - 1);
 
     if ( !fileFormat.contains("sb") ) {
-        QMessageBox::critical(this, tr("Error"), tr("There are only formats like 'sb' and 'txt' allowed."));
+        QMessageBox::critical(this, tr("Error"), tr("There are only formats like 'sb' allowed."));
         qDebug() << "File content could not be loaded because the format is incorrect.";
         return ui->textEdit_mainWindow_surface->toHtml();
     }

@@ -87,6 +87,15 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    // Check language
+    QTranslator translator;
+    QString current = QLocale::system().name();
+    if ( current.contains("de_DE") ) {
+        translator.load("scribo_de", ":/translations");
+        a.installTranslator(&translator);
+    }
+
+    // Load splash screen
     QSplashScreen *splash = new QSplashScreen;
     splash->setPixmap( QPixmap(":/img/splash.jpg") );
     splash->show();
@@ -100,6 +109,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Scribo");
     QCoreApplication::setApplicationVersion("0.1");
 
+    // Create directories
     QString scriboDir = QDir::home().absolutePath() + QDir::separator() + "scribo";
 
     if ( !QDir(scriboDir).exists() )
@@ -107,6 +117,8 @@ int main(int argc, char *argv[])
 
     splash->showMessage(QObject::tr("Establishing connections..."),
                                topRight, Qt::white);
+
+    // Create database connection
     Database db;
 
     if ( !db.open() ) {

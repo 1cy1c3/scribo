@@ -57,7 +57,7 @@ AES::AES()
 QByteArray AES::encrypt(QByteArray p_input, QByteArray p_key)
 {
     if (p_input.isEmpty()) {
-        qDebug() << "AES::encrypt(..): Cannot encrypt empty input";
+        qDebug() << "Error while encryption: Cannot encrypt empty input";
         return QByteArray();
     }
 
@@ -68,7 +68,7 @@ QByteArray AES::encrypt(QByteArray p_input, QByteArray p_key)
 QByteArray AES::decrypt(QByteArray p_input, QByteArray p_key)
 {
     if (p_input.isEmpty()) {
-        qDebug() << "AES::decrypt(..): Cannot decrypt empty input";
+        qDebug() << "Error while decryption: Cannot decrypt empty input";
         return QByteArray();
     }
     QByteArray iv = p_input.left(16);
@@ -79,7 +79,7 @@ QByteArray AES::decrypt(QByteArray p_input, QByteArray p_key)
 QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
     if (b_input.isEmpty()) {
-        qDebug() << "AES::encrypt(...): Cannot encrypt empty input";
+        qDebug() << "Error while encryption: Cannot encrypt empty input";
         return QByteArray();
     }
 
@@ -91,12 +91,12 @@ QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
     int ivSize = p_iv.size();
 
     if (keySize != 16 && keySize != 24 && keySize != 32) {
-        qDebug() << "AES::encrypt(): Invalid keysize";
+        qDebug() << "Error while encryption: Invalid keysize";
         return QByteArray();
     }
 
     if (ivSize != 16) {
-        qDebug() << "AES::encrypt(): Invalid keysize";
+        qDebug() << "Error while encryption: Invalid keysize";
         return QByteArray();
     }
 
@@ -106,7 +106,7 @@ QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
     for (int part = 0; part < chunksCount; part++) {
         // Out of range checks
         if (part*500000 > b_input.size()) {
-            qDebug() << "AES::encrypt(): Skipped: Buffer overflow";
+            qDebug() << "Error while encryption: Skipped: Buffer overflow";
             continue;
         }
 
@@ -138,7 +138,7 @@ QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
     if (b_input.isEmpty()) {
-        qDebug() << "AES::decrypt(...): Cannot decrypt empty input";
+        qDebug() << "Error while decryption: Cannot decrypt empty input";
         return QByteArray();
     }
 
@@ -148,12 +148,12 @@ QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
     int ivSize = p_iv.size();
 
     if (keySize != 16 && keySize != 24 && keySize != 32) {
-        qDebug() << "AES::encrypt(): Invalid keysize";
+        qDebug() << "Error while decryption: Invalid keysize";
         return QByteArray();
     }
 
     if (ivSize != 16) {
-        qDebug() << "AES::encrypt(): Invalid keysize";
+        qDebug() << "Error while decryption: Invalid keysize";
         return QByteArray();
     }
 
@@ -163,7 +163,7 @@ QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
     for (int part = 0; part < chunksCount; part++) {
         // Out of range checks
         if (part*500000 > b_input.size()) {
-            qDebug() << "AES::encrypt(): Skipped: Buffer overflow";
+            qDebug() << "Error while decryption: Skipped: Buffer overflow";
             continue;
         }
 

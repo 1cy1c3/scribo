@@ -2,6 +2,11 @@
 #include "ui_update.h"
 
 /**
+ * Adress of the host
+ */
+QString Update::hostAddress = "127.0.0.1";
+
+/**
  * Port of the server
  */
 int Update::port = 11001;
@@ -14,7 +19,6 @@ Update::Update(QWidget *parent) :
 
     clientSocket = new QTcpSocket(this);
 
-    QString hostAddress = "127.0.0.1";
     clientSocket->connectToHost(hostAddress, port);
 
     connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(displayError(QAbstractSocket::SocketError)));
@@ -40,26 +44,26 @@ void Update::displayError(QAbstractSocket::SocketError socketError)
         case QAbstractSocket::RemoteHostClosedError:
             break;
         case QAbstractSocket::HostNotFoundError:
-            QMessageBox::information(this, tr("Fortune Client"),
+            QMessageBox::information(this, tr("Client"),
                                      tr("The host was not found. Please check the "
                                         "host name and port settings."));
-            ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            ui->label_update_status->setText(tr("An error has occurred. Please try it again later."));
             qDebug() << "The host was not found.";
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            QMessageBox::information(this, tr("Fortune Client"),
+            QMessageBox::information(this, tr("Client"),
                                  tr("The connection was refused by the peer. "
-                                    "Make sure the fortune server is running, "
+                                    "Make sure the server is running "
                                     "and check that the host name and port "
                                     "settings are correct."));
-            ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            ui->label_update_status->setText(tr("An error has occurred. Please try it again later."));
             qDebug() << "The connection was refused by the peer.";
             break;
         default:
-            QMessageBox::information(this, tr("Fortune Client"),
+            QMessageBox::information(this, tr("Client"),
                                  tr("The following error ocurred: %1.")
                                      .arg(clientSocket->errorString()));
-            ui->label_update_status->setText("An error has occurred. Please try it again later.");
+            ui->label_update_status->setText(tr("An error has occurred. Please try it again later."));
             qDebug() << "The following error ocurred: " << clientSocket->errorString();
     }
 }

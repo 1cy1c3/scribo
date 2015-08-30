@@ -14,6 +14,8 @@ RC_ICONS = scribo.ico
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = scribo
+TRANSLATIONS = translations/$${TARGET}_de.ts
+CODECFORSRC = UTF-8
 TEMPLATE = app
 
 SOURCES += main.cpp\

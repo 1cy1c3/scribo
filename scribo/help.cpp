@@ -3,7 +3,7 @@
 Help::Help(QWidget *parent) :
     QDialog(parent)
 {
-    this->setWindowTitle("Help");
+    this->setWindowTitle(tr("Help"));
     this->setStyleSheet("#Help {height: 400px;}");
 
     player = new QMediaPlayer(this);
@@ -13,11 +13,11 @@ Help::Help(QWidget *parent) :
     player->setVideoOutput(vw);
 
     #ifdef WIN
-        player->setMedia(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/video/test.mp4"));
+        player->setMedia(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/video/help.mp4"));
     #endif
 
     #ifndef WIN
-        player->setMedia(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/video/test.mp4"));
+        player->setMedia(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/../Resources/video/help.mp4"));
     #endif
 
     player->setVolume(80);
@@ -26,11 +26,14 @@ Help::Help(QWidget *parent) :
     boxLayout->setAlignment(Qt::AlignCenter);
 
     QToolBar *toolBar = new QToolBar();
-    QAction *play = new QAction("Play", toolBar);
+    QAction *play = new QAction(tr("Play"), toolBar);
+    play->setToolTip(tr("Play"));
     play->setIcon(QIcon(":/img/play.png"));
-    QAction *pause = new QAction("Pause", toolBar);
+    QAction *pause = new QAction(tr("Pause"), toolBar);
+    pause->setToolTip(tr("Pause"));
     pause->setIcon(QIcon(":/img/pause.png"));
-    QAction *stop = new QAction("Stop", toolBar);
+    QAction *stop = new QAction(tr("Stop"), toolBar);
+    stop->setToolTip(tr("Stop"));
     stop->setIcon(QIcon(":/img/stop.png"));
     toolBar->addAction(play);
     toolBar->addAction(pause);
