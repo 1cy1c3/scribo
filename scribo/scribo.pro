@@ -6,7 +6,7 @@
 
 VERSION = 0.1
 
-QT       += core gui sql printsupport multimedia multimediawidgets
+QT       += core gui sql printsupport multimedia multimediawidgets network
 
 ICON = scribo.icns
 RC_ICONS = scribo.ico
@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     regex.cpp \
     database.cpp \
     about.cpp \
-    help.cpp
+    help.cpp \
+    update.cpp
 
 HEADERS  += mainwindow.h \
     preference.h \
@@ -31,11 +32,13 @@ HEADERS  += mainwindow.h \
     regex.h \
     database.h \
     about.h \
-    help.h
+    help.h \
+    update.h
 
 FORMS    += mainwindow.ui \
     preference.ui \
-    about.ui
+    about.ui \
+    update.ui
 
 RESOURCES += \
     app.qrc

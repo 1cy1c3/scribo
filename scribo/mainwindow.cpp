@@ -6,6 +6,7 @@
 #include "database.h"
 #include "about.h"
 #include "help.h"
+#include "update.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -135,7 +136,9 @@ void MainWindow::on_actionScribo_Help_triggered()
 
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
-
+    Update update;
+    update.setModal(true);
+    update.exec();
 }
 
 void MainWindow::on_actionAbout_triggered()

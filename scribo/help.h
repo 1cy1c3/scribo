@@ -21,6 +21,8 @@ public:
     explicit Help(QWidget *parent = 0);
     ~Help();
 
+signals:
+
 private slots:
     void on_actionPlay_triggered();
     void on_actionPause_triggered();
