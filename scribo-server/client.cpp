@@ -1,6 +1,6 @@
 /** @file client.cpp
- * Implements the client of the server.
- * The client sends and receives messages between server and users.
+ * Implements the client of the server
+ * The client sends and receives messages between server and users
  */
 
 #include "client.h"
@@ -20,7 +20,7 @@ int Client::version = 0;
 char Client::confPath[] = ":/conf/config.xml";
 
 /**
- * Constructor of the clients, initializes them.
+ * Constructor of the clients, initializes them
  * @param parent Pointer to the super class of objects
  */
 Client::Client(QObject *parent) :
@@ -31,8 +31,8 @@ Client::Client(QObject *parent) :
 }
 
 /**
- * Makes a new socket and registers the signals and slots.
- * Moreover, sets a socket descriptor based on the descriptor parameter.
+ * Makes a new socket and registers the signals and slots
+ * Moreover, sets a socket descriptor based on the descriptor parameter
  * @param descriptor Descriptor of the socket
  */
 void Client::setSocket(qintptr descriptor)
@@ -52,8 +52,8 @@ void Client::setSocket(qintptr descriptor)
 }
 
 /**
- * Event listener for connected signals.
- * Runs seperately from the thread which is created.
+ * Event listener for connected signals
+ * Runs seperately from the thread which is created
  */
 void Client::connected()
 {
@@ -61,8 +61,8 @@ void Client::connected()
 }
 
 /**
- * Event listener for disconnected signals.
- * It's an asynchronous process.
+ * Event listener for disconnected signals
+ * It's an asynchronous process
  */
 void Client::disconnected()
 {
@@ -70,9 +70,9 @@ void Client::disconnected()
 }
 
 /**
- * This is the main thread of execution and happening via main thread.
- * The code is running in the current thread, not in another threads.
- * For this reason, getting the thread from the pool.
+ * This is the main thread of execution and happening via main thread
+ * The code is running in the current thread, not in another threads
+ * For this reason, getting the thread from the pool
  */
 void Client::readyRead()
 {
@@ -95,8 +95,8 @@ void Client::readyRead()
 }
 
 /**
- * After a task performed a time consuming task, it's grabs the result here and sends it to the client.
- * Furthermore, makes the server fully asynchronous by doing time consuming task.
+ * After a task performed a time consuming task, it's grabs the result here and sends it to the client
+ * Furthermore, makes the server fully asynchronous by doing time consuming task
  * @param number Number of the task
  */
 void Client::taskResult(int number)
@@ -111,8 +111,8 @@ void Client::taskResult(int number)
 }
 
 /**
- * Method for document object model manipulation.
- * Opens the info.xml and reads out the specific values.
+ * Method for document object model manipulation
+ * Opens the info.xml and reads out the specific values
  */
 void Client::setProgramInfos() {
     QDomDocument document;

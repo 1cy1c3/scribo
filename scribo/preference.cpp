@@ -1,20 +1,38 @@
+/** @file preference.cpp
+ * Represents the preferences in this program
+ * Chooses a password and sets layout parameters
+ */
+
 #include "preference.h"
 #include "ui_preference.h"
 #include "regex.h"
 
+/**
+ * Initializes the preferences object
+ * @param parent Pointer to the super class of objects
+ * Sets a fixed size
+ * Loads actual preferences
+ */
 Preference::Preference(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Preference)
 {
     ui->setupUi(this);
+    setFixedSize( size() );
     loadPreferences();
 }
 
+/**
+ * Destroys the preferences object
+ */
 Preference::~Preference()
 {
     delete ui;
 }
 
+/**
+ * Saves preferences like layout parameters and the password
+ */
 void Preference::savePreferences() {
     QSettings setting("rk", "scribo");
     setting.beginGroup("writing");
@@ -34,6 +52,9 @@ void Preference::savePreferences() {
     setting.endGroup();
 }
 
+/**
+ * Laods preferences like layout parameters and the password
+ */
 void Preference::loadPreferences() {
     QSettings setting("rk", "scribo");
     setting.beginGroup("writing");
@@ -65,6 +86,10 @@ void Preference::loadPreferences() {
     }
 }
 
+/**
+ * Checks whether preferences are valid.
+ * @return Status of preferences
+ */
 bool Preference::checkPreferences()
 {
     Regex regex;
@@ -110,6 +135,10 @@ bool Preference::checkPreferences()
     return true;
 }
 
+/**
+ * Starts validation regarding preferences
+ * After validation, saves preferences or opens a message box
+ */
 void Preference::on_pushButton_preference_save_clicked()
 {
     if ( checkPreferences() ) {
@@ -126,6 +155,9 @@ void Preference::on_pushButton_preference_save_clicked()
     }
 }
 
+/**
+ * Closes this dialog box
+ */
 void Preference::on_pushButton_preference_cancel_clicked()
 {
     close();

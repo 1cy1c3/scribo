@@ -10,8 +10,17 @@
     <height>456</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Preferences</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <widget class="QTabWidget" name="tabWidget_preference">
    <property name="geometry">

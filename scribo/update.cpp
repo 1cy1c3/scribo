@@ -1,3 +1,8 @@
+/** @file update.cpp
+ * Represents the update checker in this program
+ * Implements a socket for interprocess communication
+ */
+
 #include "update.h"
 #include "ui_update.h"
 
@@ -11,6 +16,11 @@ QString Update::hostAddress = "127.0.0.1";
  */
 int Update::port = 11001;
 
+/**
+  * Initializes the update object
+  * Communicates with a server over sockets (write and read operations)
+  * @param parent Pointer to the super class of objects
+ */
 Update::Update(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Update)
@@ -29,6 +39,9 @@ Update::Update(QWidget *parent) :
     clientSocket->write( QCoreApplication::applicationVersion().toUtf8() );
 }
 
+/**
+ * @brief Destroys the update object
+ */
 Update::~Update()
 {
     delete ui;
@@ -102,6 +115,9 @@ void Update::readyRead()
     }
 }
 
+/**
+ * Closes the update checker
+ */
 void Update::on_pushButton_clicked()
 {
     close();

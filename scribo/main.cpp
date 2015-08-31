@@ -1,13 +1,13 @@
 /**
  * @mainpage Scribo
  *
- * A word processor with encrypt and decrypt functions.
+ * A word processor with encrypt and decrypt functions
  *
- * You are able to create or load files.
+ * You are able to create or load files
  *
- * Format the text whatever you want.
+ * Format the text whatever you want
  *
- * Administrate the server with the server software.
+ * Administrate the server with the server software
  *
  * @author Rune Krauss
  *
@@ -20,7 +20,7 @@
 
 /**
  * @file main.cpp
- * The main window is loaded and main settings are set.
+ * The main window is loaded and main settings are set
  */
 
 #ifdef OSX
@@ -28,7 +28,6 @@
 #error "Error: It is only allowed to compile the code for one operating system."
 #endif
 #endif
-
 
 #include "mainwindow.h"
 #include "database.h"
@@ -44,11 +43,11 @@
 #define MY_ASSERT_X(c, where, what) if (c == false) ;
 
 /**
- * Register a message handler for a better logging in a logfile.
+ * Register a message handler for a better logging in a logfile
  *
- * @param type Message type like WARNING or CRITICAL.
- * @param context Context for logging.
- * @param msg Message respectively a log text.
+ * @param type Message type like WARNING or CRITICAL
+ * @param context Context for logging
+ * @param msg Message respectively a log text
  */
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -74,13 +73,14 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 #endif
 
 /**
- * Start point of the program which executes the main window.
- * @param argc Slots of command line parameter.
- * @param argv Values of command line parameter.
- * @return The executing main window.
+ * Start point of the program which executes the main window
+ * @param argc Slots of command line parameter
+ * @param argv Values of command line parameter
+ * @return The executing main window
  */
 int main(int argc, char *argv[])
 {
+    // Install message handler
     #ifdef LOGFILE
         qInstallMessageHandler(messageOutput);
     #endif

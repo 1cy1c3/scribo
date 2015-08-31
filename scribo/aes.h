@@ -1,3 +1,8 @@
+/**
+ * @file aes.h
+ * @brief Embodies the aes algorithm to encrypt and decrypt data
+ */
+
 /*
  ---------------------------------------------------------------------------
  Copyright (c) 2013, Igor Saric. All rights reserved.
@@ -89,7 +94,8 @@
 #define block_copy_nn(d, s, l)    memcpy(d, s, l)
 #define block_copy(d, s)          memcpy(d, s, N_BLOCK)
 
-#define sb_data(w) {    /* S Box data values */                            \
+/* S Box data values */
+#define sb_data(w) {                                                       \
     w(0x63), w(0x7c), w(0x77), w(0x7b), w(0xf2), w(0x6b), w(0x6f), w(0xc5),\
     w(0x30), w(0x01), w(0x67), w(0x2b), w(0xfe), w(0xd7), w(0xab), w(0x76),\
     w(0xca), w(0x82), w(0xc9), w(0x7d), w(0xfa), w(0x59), w(0x47), w(0xf0),\
@@ -123,7 +129,8 @@
     w(0x8c), w(0xa1), w(0x89), w(0x0d), w(0xbf), w(0xe6), w(0x42), w(0x68),\
     w(0x41), w(0x99), w(0x2d), w(0x0f), w(0xb0), w(0x54), w(0xbb), w(0x16) }
 
-#define isb_data(w) {   /* Inverse S Box data values */                    \
+/* Inverse S Box data values */
+#define isb_data(w) {                                                      \
     w(0x52), w(0x09), w(0x6a), w(0xd5), w(0x30), w(0x36), w(0xa5), w(0x38),\
     w(0xbf), w(0x40), w(0xa3), w(0x9e), w(0x81), w(0xf3), w(0xd7), w(0xfb),\
     w(0x7c), w(0xe3), w(0x39), w(0x82), w(0x9b), w(0x2f), w(0xff), w(0x87),\
@@ -157,7 +164,8 @@
     w(0x17), w(0x2b), w(0x04), w(0x7e), w(0xba), w(0x77), w(0xd6), w(0x26),\
     w(0xe1), w(0x69), w(0x14), w(0x63), w(0x55), w(0x21), w(0x0c), w(0x7d) }
 
-#define mm_data(w) {    /* basic data for forming finite field tables */   \
+/* Basic data for forming finite field tables */
+#define mm_data(w) {                                                       \
     w(0x00), w(0x01), w(0x02), w(0x03), w(0x04), w(0x05), w(0x06), w(0x07),\
     w(0x08), w(0x09), w(0x0a), w(0x0b), w(0x0c), w(0x0d), w(0x0e), w(0x0f),\
     w(0x10), w(0x11), w(0x12), w(0x13), w(0x14), w(0x15), w(0x16), w(0x17),\
@@ -206,16 +214,55 @@ static const uint_8t gfmul_b[256] = mm_data(fb);
 static const uint_8t gfmul_d[256] = mm_data(fd);
 static const uint_8t gfmul_e[256] = mm_data(fe);
 
+/**
+ * Embodies the aes algorithm to encrypt and decrypt data
+ *
+ * @author Rune Krauss
+ */
 class AES
 {
 public:
+    /**
+     * @brief Initializes the about object
+     */
     AES();
 
     // Public functions
+    /**
+     * @brief Encrypts data based on plaintext and cipher key
+     * @param p_input Plaintext
+     * @param p_key Cipher key
+     * @return Encrypted data
+     */
     QByteArray encrypt(QByteArray p_input, QByteArray p_key);
+    /**
+     * @brief Decrypts data based on cipher text and cipher key
+     * @param p_input Cipher text
+     * @param p_key Cipher key
+     * @return Decrypted data
+     */
     QByteArray decrypt(QByteArray p_input, QByteArray p_key);
+    /**
+     * @brief Encrypts data based on ciper text, cipher key and IV
+     * @param b_input Plaintext
+     * @param p_key Cipher key
+     * @param p_iv Initialization vector
+     * @return Encrypted data
+     */
     QByteArray encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv);
+    /**
+     * @brief Decrypts data based on cipher text, cipher key and IV
+     * @param b_input Cipher text
+     * @param p_key Cipher key
+     * @param p_iv Initialization vector
+     * @return Decrypted data
+     */
     QByteArray decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv);
+    /**
+     * @brief Converts hexadecimal string to a byte array
+     * @param key Cipher key
+     * @return Byte array
+     */
     QByteArray hexStringToByte(QString key);
 
 private:
@@ -226,27 +273,122 @@ private:
         uint_8t rnd;
     } aes_context;
 
-    // QT helper functions
+    // Qt helper functions
+    /**
+     * @brief Converts a byte array to a char array
+     * @param src Byte array
+     * @param dest Char array
+     */
     void qByteArrayToUCharArray(QByteArray src, unsigned char *dest);
+    /**
+     * @brief Converts a char array to a byte array.
+     * @param src Char array
+     * @param p_size Size
+     * @return Byte array
+     */
     QByteArray uCharArrayToQByteArray(unsigned char *src, int p_size);
+    /**
+     * @brief Removes padding bits from a byte array
+     * @param input Byte array
+     */
     void removePadding(QByteArray *input);
+    /**
+     * @brief Adds padding bits to a byte array
+     * @param input Byte array
+     */
     void addPadding(QByteArray *input);
+    /**
+     * @brief Generates random bytes
+     * @param length Length
+     * @return Byte array
+     */
     QByteArray generateRandomBytes(int length);
 
     // Encryption functions
+    /**
+     * @brief Sets key regarding AES
+     * @param key Cipher key
+     * @param keylen Length of the cipher key
+     * @param ctx AES context
+     * @return Result of AES
+     */
     aes_result aes_set_key(const unsigned char key[], int keylen, aes_context ctx[1] );
+    /**
+     * @brief Encrypts data
+     * @param in Buffer holding the input data
+     * @param out Buffer holding the output data
+     * @param ctx AES context
+     * @return Status from the result
+     */
     aes_result aes_encrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
+    /**
+     * @brief Decrypts data
+     * @param in Buffer holding the input data
+     * @param out Buffer holding the output data
+     * @param ctx AES context
+     * @return Status from the result
+     */
     aes_result aes_decrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] );
+    /**
+     * @brief Encrypts data in terms of CBC
+     * @param in Buffer holding the input data
+     * @param out Buffer holding the output data
+     * @param size Size of the input data
+     * @param iv Initialization vector (updated after use)
+     * @param ctx AES context
+     * @return Status from the result
+     */
     aes_result aes_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
+    /**
+     * @brief Decrypts data in terms of CBC
+     * @param in Buffer holding the input data
+     * @param out Buffer holding the output data
+     * @param size Size of the input data
+     * @param iv Initialization vector (updated after use)
+     * @param ctx AES context
+     * @return Status from the result
+     */
     aes_result aes_cbc_decrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] );
 
     // Helper functions
+    /**
+     * @brief Makes a disjunctive operation
+     * @param d Data
+     * @param s Source
+     */
     void xor_block( void *d, const void *s );
+    /**
+     * @brief Copies data and refers to the key
+     * @param d Data
+     * @param s Source
+     * @param k Key
+     */
     void copy_and_key( void *d, const void *s, const void *k );
+    /**
+     * @brief Adds round key
+     * @param d Data
+     * @param k Key
+     */
     void add_round_key( uint_8t d[N_BLOCK], const uint_8t k[N_BLOCK] );
+    /**
+     * @brief Shifts rows
+     * @param st Data
+     */
     void shift_sub_rows( uint_8t st[N_BLOCK] );
+    /**
+     * @brief Inverts shifted Rows
+     * @param st Data
+     */
     void inv_shift_sub_rows( uint_8t st[N_BLOCK] );
+    /**
+     * @brief Mixes columns
+     * @param dt Data
+     */
     void mix_sub_columns( uint_8t dt[N_BLOCK] );
+    /**
+     * @brief Inverses mixed columns
+     * @param dt Data
+     */
     void inv_mix_sub_columns( uint_8t dt[N_BLOCK] );
 };
 

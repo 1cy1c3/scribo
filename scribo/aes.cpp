@@ -1,3 +1,12 @@
+/**
+ * @file aes.cpp
+ * Embodies the aes algorithm to encrypt and decrypt data
+ * 1. Substitutes bytes
+ * 2. Shifts rows
+ * 3. Mixes columns
+ * 4. Adds round key
+ */
+
 /*
  ---------------------------------------------------------------------------
  Copyright (c) 2013, Igor Saric. All rights reserved.
@@ -49,11 +58,20 @@
 
 #include "aes.h"
 
+/**
+ * Initializes the about object
+ */
 AES::AES()
 {
 }
 
 // Encryption with IV
+/**
+ * Encrypts data based on plaintext and cipher key
+ * @param p_input Plaintext
+ * @param p_key Cipher key
+ * @return Encrypted data
+ */
 QByteArray AES::encrypt(QByteArray p_input, QByteArray p_key)
 {
     if (p_input.isEmpty()) {
@@ -65,6 +83,12 @@ QByteArray AES::encrypt(QByteArray p_input, QByteArray p_key)
     return encrypt(p_input, p_key, iv);
 }
 
+/**
+ * Decrypts data based on cipher text and cipher key
+ * @param p_input Cipher text
+ * @param p_key Cipher key
+ * @return Decrypted data
+ */
 QByteArray AES::decrypt(QByteArray p_input, QByteArray p_key)
 {
     if (p_input.isEmpty()) {
@@ -76,6 +100,13 @@ QByteArray AES::decrypt(QByteArray p_input, QByteArray p_key)
     return decrypt(input, p_key, iv);
 }
 
+/**
+ * Encrypts data based on ciper text, cipher key and IV
+ * @param b_input Plaintext
+ * @param p_key Cipher key
+ * @param p_iv Initialization vector
+ * @return Encrypted data
+ */
 QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
     if (b_input.isEmpty()) {
@@ -135,6 +166,13 @@ QByteArray AES::encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
     return result;
 }
 
+/**
+ * Decrypt Decrypts data based on cipher text, cipher key and IV
+ * @param b_input Cipher text
+ * @param p_key Cipher key
+ * @param p_iv Initialization vector
+ * @return Decrypted data
+ */
 QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 {
     if (b_input.isEmpty()) {
@@ -197,22 +235,42 @@ QByteArray AES::decrypt(QByteArray b_input, QByteArray p_key, QByteArray p_iv)
 
 
 // Helper functions
+/**
+ * Converts hexadecimal string to a byte array
+ * @param key Cipher key
+ * @return Byte array
+ */
 QByteArray AES::hexStringToByte(QString key) {
     return QByteArray::fromHex(QString(key).toLatin1());
 }
 
+/**
+ * Converts a byte array to a char array
+ * @param src Byte array
+ * @param dest Char array
+ */
 void AES::qByteArrayToUCharArray(QByteArray src, unsigned char *dest) {
     for (int i = 0; i < src.size(); i++) {
         dest[i] = src.at(i);
     }
 }
 
+/**
+ * Converts a char array to a byte array
+ * @param src Char array
+ * @param p_size Size
+ * @return Byte array
+ */
 QByteArray AES::uCharArrayToQByteArray(unsigned char *src, int p_size) {
     QByteArray array((char*)src, p_size);
     return array;
 }
 
 // PKCS#7 padding
+/**
+ * Removes padding bits from a byte array through PKCS#7
+ * @param input Byte array
+ */
 void AES::removePadding(QByteArray *input) {
     int padding = input->at(input->size() - 1);
 
@@ -223,6 +281,10 @@ void AES::removePadding(QByteArray *input) {
     }
 }
 
+/**
+ * Adds padding bits to a byte array through PKCS#7
+ * @param input Byte array
+ */
 void AES::addPadding(QByteArray* input) {
     int size = input->size();
     int padding = 16 - (size % 16);
@@ -233,6 +295,11 @@ void AES::addPadding(QByteArray* input) {
 }
 
 // Algorithm
+/**
+ * Makes a disjunctive operation
+ * @param d Data
+ * @param s Source
+ */
 void AES::xor_block( void *d, const void *s ) {
     ((uint_32t*)d)[ 0] ^= ((uint_32t*)s)[ 0];
     ((uint_32t*)d)[ 1] ^= ((uint_32t*)s)[ 1];
@@ -240,6 +307,12 @@ void AES::xor_block( void *d, const void *s ) {
     ((uint_32t*)d)[ 3] ^= ((uint_32t*)s)[ 3];
 }
 
+/**
+ * Copies data and refers to the key
+ * @param d Data
+ * @param s Source
+ * @param k Key
+ */
 void AES::copy_and_key( void *d, const void *s, const void *k )
 {
     ((uint_32t*)d)[ 0] = ((uint_32t*)s)[ 0] ^ ((uint_32t*)k)[ 0];
@@ -248,11 +321,20 @@ void AES::copy_and_key( void *d, const void *s, const void *k )
     ((uint_32t*)d)[ 3] = ((uint_32t*)s)[ 3] ^ ((uint_32t*)k)[ 3];
 }
 
+/**
+ * Adds round key
+ * @param d Data
+ * @param k Key
+ */
 void AES::add_round_key( uint_8t d[N_BLOCK], const uint_8t k[N_BLOCK] )
 {
     xor_block(d, k);
 }
 
+/**
+ * Shifts rows
+ * @param st Data
+ */
 void AES::shift_sub_rows( uint_8t st[N_BLOCK] )
 {
     uint_8t tt;
@@ -270,6 +352,10 @@ void AES::shift_sub_rows( uint_8t st[N_BLOCK] )
     st[ 7] = s_box(st[ 3]); st[ 3] = s_box( tt );
 }
 
+/**
+ * Inverts shifted rows
+ * @param st Data
+ */
 void AES::inv_shift_sub_rows( uint_8t st[N_BLOCK] )
 {
     uint_8t tt;
@@ -287,6 +373,10 @@ void AES::inv_shift_sub_rows( uint_8t st[N_BLOCK] )
     st[11] = is_box(st[15]); st[15] = is_box( tt );
 }
 
+/**
+ * Mixes columns
+ * @param dt Data
+ */
 void AES::mix_sub_columns( uint_8t dt[N_BLOCK] )
 {
     uint_8t st[N_BLOCK];
@@ -313,6 +403,10 @@ void AES::mix_sub_columns( uint_8t dt[N_BLOCK] )
     dt[15] = gfm3_sb(st[12]) ^ s_box(st[1]) ^ s_box(st[6]) ^ gfm2_sb(st[11]);
   }
 
+/**
+ * Inverses mixed columns
+ * @param dt Data
+ */
 void AES::inv_mix_sub_columns( uint_8t dt[N_BLOCK] )
 {
     uint_8t st[N_BLOCK];
@@ -339,7 +433,13 @@ void AES::inv_mix_sub_columns( uint_8t dt[N_BLOCK] )
     dt[11] = is_box(gfm_b(st[12]) ^ gfm_d(st[13]) ^ gfm_9(st[14]) ^ gfm_e(st[15]));
   }
 
-// Set the cipher key for the pre-keyed version
+/**
+ * Sets the cipher key for the pre-keyed version
+ * @param key Cipher key
+ * @param keylen Length of the cipher key
+ * @param ctx AES context
+ * @return Result of AES
+ */
 aes_result AES::aes_set_key( const unsigned char key[], int keylen, aes_context ctx[1] )
 {
     uint_8t cc, rc, hi;
@@ -394,7 +494,13 @@ aes_result AES::aes_set_key( const unsigned char key[], int keylen, aes_context 
     return 0;
 }
 
-// Encrypt a single block of 16 bytes
+/**
+ * Encrypts a single block of 16 bytes
+ * @param in Buffer holding the input data
+ * @param out Buffer holding the output data
+ * @param ctx AES context
+ * @return Status from the result
+ */
 aes_result AES::aes_encrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] )
 {
     if( ctx->rnd )
@@ -415,7 +521,15 @@ aes_result AES::aes_encrypt( const unsigned char in[N_BLOCK], unsigned char out[
     return 0;
 }
 
-// CBC encrypt a number of blocks (input and return an IV)
+/**
+ * Encrypts a number of blocks (input and return an IV)
+ * @param in Buffer holding the input data
+ * @param out Buffer holding the output data
+ * @param size Size of the input data
+ * @param iv Initialization vector (updated after use)
+ * @param ctx AES context
+ * @return Status from the result
+ */
 aes_result AES::aes_cbc_encrypt(const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] )
 {
     if (size % 16 != 0)
@@ -435,7 +549,13 @@ aes_result AES::aes_cbc_encrypt(const unsigned char *in, unsigned char *out, uns
     return EXIT_SUCCESS;
 }
 
-// Decrypt a single block of 16 bytes
+/**
+ * Decrypts a single block of 16 bytes
+ * @param in Buffer holding the input data
+ * @param out Buffer holding the output data
+ * @param ctx AES context
+ * @return Status from the result
+ */
 aes_result AES::aes_decrypt( const unsigned char in[N_BLOCK], unsigned char out[N_BLOCK], const aes_context ctx[1] )
 {
     if( ctx->rnd )
@@ -456,7 +576,15 @@ aes_result AES::aes_decrypt( const unsigned char in[N_BLOCK], unsigned char out[
     return 0;
 }
 
-// CBC decrypt a number of blocks (input and return an IV)
+/**
+ * Decrypts a number of blocks (input and return an IV)
+ * @param in Buffer holding the input data
+ * @param out Buffer holding the output data
+ * @param size Size of the input data
+ * @param iv Initialization vector (updated after use)
+ * @param ctx AES context
+ * @return Status from the result
+ */
 aes_result AES::aes_cbc_decrypt( const unsigned char *in, unsigned char *out, unsigned long size, unsigned char iv[N_BLOCK], const aes_context ctx[1] )
 {
     if (size % 16 != 0)

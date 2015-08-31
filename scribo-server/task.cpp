@@ -1,6 +1,6 @@
 /** @file task.cpp
- * Starts parallel processing units.
- * The units saves its progress in the stack.
+ * Starts parallel processing units
+ * The units saves its progress in the stack
  */
 
 #include "task.h"
@@ -14,10 +14,10 @@ Task::Task()
 }
 
 /**
- * When the thread pool kicks up, it's going to hit this run and it's going to do this time consuming task.
- * After it's done, sends the results back to the main thread.
- * This runs in a separate thread and there are no any control regarding this thread.
- * This may just stay in the queue for several ms depending on how busy the server is.
+ * When the thread pool kicks up, it's going to hit this run and it's going to do this time consuming task
+ * After it's done, sends the results back to the main thread
+ * This runs in a separate thread and there are no any control regarding this thread
+ * This may just stay in the queue for several ms depending on how busy the server is
  */
 void Task::run()
 {

@@ -1,3 +1,8 @@
+/** @file mainwindow.cpp
+ * Presents the main window of this program
+ * Holds main features like text and document operations
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "preference.h"
@@ -8,6 +13,14 @@
 #include "help.h"
 #include "update.h"
 
+/**
+ * Initializes the main window object
+ * Updates preferences
+ * Checks whether database tables are exists
+ * Adds a context menu and sets accepted drops
+ * Moreover, registers signals and slots
+ * @param parent Pointer to the super class of objects
+ */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -39,17 +52,26 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(backgroundChanged()), this, SLOT(updatePreferences()));
 }
 
+/**
+ * Destroys the about object
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/**
+ * Creates a new document
+ */
 void MainWindow::on_actionNew_triggered()
 {
     fileName = "";
     ui->textEdit_mainWindow_surface->setHtml("");
 }
 
+/**
+ * Opens a document and checks its format
+ */
 void MainWindow::on_actionOpen_triggered()
 {
     QString file = QFileDialog::getOpenFileName(this, tr("Open Document"), QDir::home().absolutePath(), "text files (*.sb)");
@@ -62,6 +84,9 @@ void MainWindow::on_actionOpen_triggered()
 
 }
 
+/**
+ * Saves a document and draws an attention to existing documents
+ */
 void MainWindow::on_actionSave_triggered()
 {
     if ( fileName.isEmpty() )
@@ -82,7 +107,9 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-
+/**
+ * Saves a document in a specific location and draws an attention to existing documents
+ */
 void MainWindow::on_actionSave_As_triggered()
 {
     QString file = QFileDialog::getSaveFileName(this, tr("Save Document"), QDir::home().absolutePath(), "text files (*.sb)");
@@ -94,31 +121,49 @@ void MainWindow::on_actionSave_As_triggered()
     }
 }
 
+/**
+ * Copies selected text
+ */
 void MainWindow::on_actionCopy_triggered()
 {
     ui->textEdit_mainWindow_surface->copy();
 }
 
+/**
+ * Cuts out selected text
+ */
 void MainWindow::on_actionCut_triggered()
 {
     ui->textEdit_mainWindow_surface->cut();
 }
 
+/**
+ * Undoes an action
+ */
 void MainWindow::on_actionUndo_triggered()
 {
     ui->textEdit_mainWindow_surface->undo();
 }
 
+/**
+ * Redoes an action
+ */
 void MainWindow::on_actionRedo_triggered()
 {
     ui->textEdit_mainWindow_surface->redo();
 }
 
+/**
+ * Pastes selected text
+ */
 void MainWindow::on_actionPaste_triggered()
 {
     ui->textEdit_mainWindow_surface->paste();
 }
 
+/**
+ * Opens the help dialog with a video
+ */
 void MainWindow::on_actionScribo_Help_triggered()
 {
     Help help;
@@ -126,6 +171,9 @@ void MainWindow::on_actionScribo_Help_triggered()
     help.exec();
 }
 
+/**
+ * Checks for potential updates
+ */
 void MainWindow::on_actionCheck_for_updates_triggered()
 {
     Update update;
@@ -133,6 +181,9 @@ void MainWindow::on_actionCheck_for_updates_triggered()
     update.exec();
 }
 
+/**
+ * Opens the about dialog with program infos
+ */
 void MainWindow::on_actionAbout_triggered()
 {
     About about;
@@ -140,6 +191,9 @@ void MainWindow::on_actionAbout_triggered()
     about.exec();
 }
 
+/**
+ * Opens the preferences dialog
+ */
 void MainWindow::on_actionSettings_triggered()
 {
     preference = new Preference();
@@ -150,6 +204,9 @@ void MainWindow::on_actionSettings_triggered()
     preference->exec();
 }
 
+/**
+ * Quits the program after a confirmation dialog
+ */
 void MainWindow::on_actionClose_triggered()
 {
     if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
@@ -166,6 +223,9 @@ void MainWindow::on_actionClose_triggered()
     }
 }
 
+/**
+ * Standardizes a selected text
+ */
 void MainWindow::on_actionNormal_triggered()
 {
     QTextCharFormat fmt;
@@ -175,6 +235,9 @@ void MainWindow::on_actionNormal_triggered()
     mergeFormatOnWordOrSelection(fmt);
 }
 
+/**
+ * Makes a selected text bold
+ */
 void MainWindow::on_actionBold_triggered()
 {
     QTextCharFormat fmt;
@@ -182,6 +245,9 @@ void MainWindow::on_actionBold_triggered()
     mergeFormatOnWordOrSelection(fmt);
 }
 
+/**
+ * Makes a selected text italic
+ */
 void MainWindow::on_actionItalic_triggered()
 {
     QTextCharFormat fmt;
@@ -189,6 +255,9 @@ void MainWindow::on_actionItalic_triggered()
     mergeFormatOnWordOrSelection(fmt);
 }
 
+/**
+ * Makes a selected text underlined
+ */
 void MainWindow::on_actionUnderline_triggered()
 {
     QTextCharFormat fmt;
@@ -196,6 +265,11 @@ void MainWindow::on_actionUnderline_triggered()
     mergeFormatOnWordOrSelection(fmt);
 }
 
+/**
+ * Merges a format on a word or selection
+ * Sets the cursor to its right position
+ * @param format Format
+ */
 void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
     cursor = ui->textEdit_mainWindow_surface->textCursor();
@@ -205,6 +279,9 @@ void MainWindow::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
     ui->textEdit_mainWindow_surface->mergeCurrentCharFormat(format);
 }
 
+/**
+ * Aligns a selected text left
+ */
 void MainWindow::on_actionAlign_text_left_triggered()
 {
     cursor = ui->textEdit_mainWindow_surface->textCursor();
@@ -214,6 +291,9 @@ void MainWindow::on_actionAlign_text_left_triggered()
     ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }
 
+/**
+ * Centers a selected text
+ */
 void MainWindow::on_actionCenter_text_triggered()
 {
     cursor = ui->textEdit_mainWindow_surface->textCursor();
@@ -223,6 +303,9 @@ void MainWindow::on_actionCenter_text_triggered()
     ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }
 
+/**
+ * Aligns a selected text right
+ */
 void MainWindow::on_actionAlign_text_right_triggered()
 {
     cursor = ui->textEdit_mainWindow_surface->textCursor();
@@ -232,6 +315,9 @@ void MainWindow::on_actionAlign_text_right_triggered()
     ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }
 
+/**
+ * Creates a justification regarding a selected text
+ */
 void MainWindow::on_actionJustification_triggered()
 {
     cursor = ui->textEdit_mainWindow_surface->textCursor();
@@ -241,18 +327,27 @@ void MainWindow::on_actionJustification_triggered()
     ui->textEdit_mainWindow_surface->setTextCursor(cursor);
 }
 
+/**
+ * Opens the font dialog
+ */
 void MainWindow::on_actionFont_triggered()
 {
     color = QColorDialog::getColor(Qt::white, this);
     ui->textEdit_mainWindow_surface->setTextColor(color);
 }
 
+/**
+ * Highlights a selected text
+ */
 void MainWindow::on_actionHighlighting_triggered()
 {
     color = QColorDialog::getColor(Qt::white, this);
     ui->textEdit_mainWindow_surface->setTextBackgroundColor(color);
 }
 
+/**
+ * Sets the background color with a dialog
+ */
 void MainWindow::on_actionBackground_triggered()
 {
     QPalette* palette = new QPalette();
@@ -268,6 +363,9 @@ void MainWindow::on_actionBackground_triggered()
     emit backgroundChanged();
 }
 
+/**
+ * Opens a submenu regarding font settings
+ */
 void MainWindow::on_actionFont_2_triggered()
 {
     bool ok;
@@ -285,6 +383,9 @@ void MainWindow::on_actionFont_2_triggered()
     }
 }
 
+/**
+ * Updates preferences
+ */
 void MainWindow::updatePreferences()
 {
     QSettings setting("rk", "scribo");
@@ -317,6 +418,10 @@ void MainWindow::updatePreferences()
     setting.endGroup();
 }
 
+/**
+ * Encrypts a text using plaintext and cipher key
+ * Chooses between a permanent or a individual password using the preferences
+ */
 void MainWindow::on_actionEncrypt_triggered()
 {
     if (passwordUsed)
@@ -384,6 +489,10 @@ void MainWindow::on_actionEncrypt_triggered()
     }
 }
 
+/**
+ * Decrypts a text using cipher text and cipher key
+ * Chooses between a permanent or a individual password using the preferences
+ */
 void MainWindow::on_actionDecrypt_triggered()
 {
     if (passwordUsed)
@@ -451,6 +560,11 @@ void MainWindow::on_actionDecrypt_triggered()
     }
 }
 
+/**
+ * Encrypts the actual text using the password
+ * @param password Password
+ * @return Encrypted text
+ */
 QByteArray MainWindow::encrypt(QString password)
 {
     AES crypto;
@@ -465,6 +579,11 @@ QByteArray MainWindow::encrypt(QString password)
     return encrypted;
 }
 
+/**
+ * Decrypts the actual text using the password
+ * @param password Password
+ * @return Decrypted text
+ */
 QByteArray MainWindow::decrypt(QString password)
 {
     AES crypto;
@@ -479,6 +598,10 @@ QByteArray MainWindow::decrypt(QString password)
     return decrypted;
 }
 
+/**
+ * Inserts an valid image
+ * Copies the specific image in the program folder
+ */
 void MainWindow::on_actionImage_triggered()
 {
     QString scriboDir = QDir::home().absolutePath() + QDir::separator() + "scribo";
@@ -509,6 +632,9 @@ void MainWindow::on_actionImage_triggered()
     cursor.insertImage(imageFormat);
 }
 
+/**
+ * Opens the printer dialog
+ */
 void MainWindow::on_actionPrint_triggered()
 {
     QPrinter *printer;
@@ -519,6 +645,9 @@ void MainWindow::on_actionPrint_triggered()
     ui->textEdit_mainWindow_surface->print(printer);
 }
 
+/**
+ * Adds a context menu with operations like copy and paste
+ */
 void MainWindow::addContextMenu()
 {
     QAction *copy, *cut, *paste, *font, *color;
@@ -540,21 +669,37 @@ void MainWindow::addContextMenu()
     ui->textEdit_mainWindow_surface->addAction(color);
 }
 
+/**
+ * Event which is sent to a widget when a drag and drop action enters it
+ * @param event Event
+ */
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
 }
 
+/**
+ * Event that is sent to a widget when a drag and drop action leaves it
+ * @param event Event
+ */
 void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
 {
     event->accept();
 }
 
+/**
+ * Event which is sent while a drag and drop action is in progress
+ * @param event Event
+ */
 void MainWindow::dragMoveEvent(QDragMoveEvent *event)
 {
     event->accept();
 }
 
+/**
+ * Event which is sent when a drag and drop action is completed
+ * @param event Event
+ */
 void MainWindow::dropEvent(QDropEvent *event)
 {
     if ( !ui->textEdit_mainWindow_surface->toPlainText().isEmpty() ) {
@@ -589,6 +734,11 @@ void MainWindow::dropEvent(QDropEvent *event)
     }
 }
 
+/**
+ * Gets the file content of a given file
+ * @param file File
+ * @return File content
+ */
 QString MainWindow::getFileContent(QString file)
 {
     QStringList list = file.split( "/" );

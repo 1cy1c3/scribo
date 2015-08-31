@@ -1,6 +1,6 @@
 /**
  * @file client.h
- * @brief Describes the client of the server.
+ * @brief Describes the client of the server
  */
 
 #ifndef CLIENT_H
@@ -13,7 +13,7 @@
 #include <QtXml>
 
 /**
- * Describes the client of the server.
+ * Describes the client of the server
  *
  * @author Rune Krauss
  */
@@ -22,17 +22,17 @@ class Client : public QObject
     Q_OBJECT
 public:
     /**
-     * @brief Initializes the client object.
+     * @brief Initializes the client object
      * @param parent Pointer to the super class of objects
      */
     explicit Client(QObject *parent = 0);
     /**
-     * @brief Set the bidirectional interface for interprocess communication.
+     * @brief Set the bidirectional interface for interprocess communication
      * @param Descriptor of the socket
      */
     void setSocket(qintptr descriptor);
     /**
-     * @brief Configures the program infos.
+     * @brief Configures the program infos
      */
     void setProgramInfos();
 
@@ -40,20 +40,20 @@ signals:
 
 public slots:
     /**
-     * @brief Event listener for connected events.
+     * @brief Event listener for connected events
      */
     void connected();
     /**
-     * @brief Event listener for disconnected events.
+     * @brief Event listener for disconnected events
      */
     void disconnected();
     /**
-     * @brief Event listener for reading messages from the client.
+     * @brief Event listener for reading messages from the client
      */
     void readyRead();
 
     /**
-     * @brief Event listener for sending messages to the client.
+     * @brief Event listener for sending messages to the client
      * @param number Number of the task regarding the thread
      */
     void taskResult(int number);

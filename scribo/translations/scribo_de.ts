@@ -614,7 +614,7 @@ Ein Passwort muss mindestens eine Zahl enthalten.</translation>
         <location filename="../update.cpp" line="59"/>
         <location filename="../update.cpp" line="66"/>
         <source>An error has occurred. Please try it again later.</source>
-        <translation>Es ist ein Fehler aufgetreten. Bitte probieren Sie es später noch einmal.</translation>
+        <translation type="unfinished">Es ist ein Fehler aufgetreten. Bitte probieren &lt;br&gt; Sie es später noch einmal.</translation>
     </message>
     <message>
         <location filename="../update.cpp" line="55"/>

@@ -1,5 +1,16 @@
+/** @file about.cpp
+ * Represents the help about this program
+ * Furthermore, presents a video with a status bar
+ */
+
 #include "help.h"
 
+/**
+ * Constructor of the help object
+ * Creates a tool bar, surface and status bar
+ * Moreover, creates a video widget within video player
+ * @param parent Pointer to the super class of objects
+ */
 Help::Help(QWidget *parent) :
     QDialog(parent)
 {
@@ -67,27 +78,42 @@ Help::Help(QWidget *parent) :
     setLayout(boxLayout);
 }
 
+/**
+ * Destructor of the help object
+ */
 Help::~Help()
 {
 }
 
+/**
+ * @brief Plays a video and refreshes the widget
+ */
 void Help::on_actionPlay_triggered()
 {
     player->play();
     setHelpHeight();
 }
 
+/**
+ * @brief Pauses a video and refreshes the widget
+ */
 void Help::on_actionPause_triggered()
 {
     player->pause();
     setHelpHeight();
 }
 
+/**
+ * @brief Stops a video and refreshes the widget
+ */
 void Help::on_actionStop_triggered(){
     player->stop();
     setHelpHeight();
 }
 
+/**
+ * @brief Sets the size of the help widget
+ */
 void Help::setHelpHeight()
 {
     this->setStyleSheet("#Help {height: 300px;}");

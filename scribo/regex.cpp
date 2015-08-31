@@ -1,5 +1,5 @@
 /** @file regex.cpp
- * @brief Represents the regular expressions in this program.
+ *  Represents the regular expressions in this program.
  */
 
 #include "regex.h"

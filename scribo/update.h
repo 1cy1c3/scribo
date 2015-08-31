@@ -1,3 +1,8 @@
+/**
+ * @file update.h
+ * @brief Represents the update checker in this program
+ */
+
 #ifndef UPDATE_H
 #define UPDATE_H
 
@@ -10,12 +15,24 @@ namespace Ui {
 class Update;
 }
 
+/**
+ * Realises the update checker with sockets
+ *
+ * @author Rune Krauss
+ */
 class Update : public QDialog
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Initializes the update object
+     * @param parent Pointer to the super class of objects
+     */
     explicit Update(QWidget *parent = 0);
+    /**
+     * @brief Destroys the update object
+     */
     ~Update();
 
 signals:
@@ -41,10 +58,19 @@ private slots:
      */
     void displayError (QAbstractSocket::SocketError socketError);
 
+    /**
+     * @brief Closes the dialog
+     */
     void on_pushButton_clicked();
 
 private:
+    /**
+     * @brief Dynamic object for access to the graphical elements
+     */
     Ui::Update *ui;
+    /**
+     * @brief Bidirectional interface
+     */
     QTcpSocket *clientSocket;
     /**
      * @brief Port of the server

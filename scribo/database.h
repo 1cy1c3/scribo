@@ -1,6 +1,6 @@
 /**
  * @file database.h
- * @brief Represents the database and its operations.
+ * @brief Represents the database and its operations
  */
 
 #ifndef DATABASE_H
@@ -14,7 +14,7 @@
 #include <QFile>
 
 /**
- * Realises the database connection.
+ * Realises the database connection
  *
  * @author Rune Krauss
  */
@@ -35,15 +35,15 @@ private:
     static QString driver;
 public:
     /**
-     * @brief Initializes the database object.
+     * @brief Initializes the database object
      */
     Database();
     /**
-     * @brief Destroys the database object.
+     * @brief Destroys the database object
      */
     ~Database();
     /**
-     * @brief Checks whether the database is open.
+     * @brief Checks whether the database is open
      * @return Status of the database connection
      */
     bool open();

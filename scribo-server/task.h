@@ -1,6 +1,6 @@
 /**
  * @file task.h
- * @brief Represents the parallel execution unit.
+ * @brief Represents the parallel execution unit
  */
 
 #ifndef TASK_H
@@ -12,7 +12,7 @@
 #include <QDebug>
 
 /**
- * Represents the parallel execution unit.
+ * Represents the parallel execution unit
  *
  * @author Rune Krauss
  */
@@ -21,20 +21,20 @@ class Task : public QObject, public QRunnable
     Q_OBJECT
 public:
     /**
-     * @brief Initializes the task object regarding threads.
+     * @brief Initializes the task object regarding threads
      */
     Task();
 
 signals:
     /**
-     * @brief Notifies the main thread when it is done.
+     * @brief Notifies the main thread when it is done
      * @param number Number of the task
      */
     void result(int number);
 
 protected:
     /**
-     * @brief Starts the task.
+     * @brief Starts the task
      */
     void run();
 };
