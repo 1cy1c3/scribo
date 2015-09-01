@@ -1,6 +1,6 @@
 /** @file database.cpp
- * Configures the database settings.
- * Moreover, initializes a database connection.
+ * Configures the database settings
+ * Moreover, initializes a database connection
  */
 
 #include "database.h"
@@ -15,9 +15,9 @@ QString Database::driver = "QSQLITE";
 QString Database::name = "scribo.db";
 
 /**
- * Initializes the database object.
- * At first, calls the method setDatabaseSettings().
- * Second, configures different fields like the password.
+ * Initializes the database object
+ * At first, calls the method setDatabaseSettings()
+ * Second, configures different fields like the password
  */
 Database::Database()
 {
@@ -26,8 +26,8 @@ Database::Database()
 }
 
 /**
- * Destroys the database object.
- * Closes and removes the database.
+ * Destroys the database object
+ * Closes and removes the database
  */
 Database::~Database(){
     if (QSqlDatabase::database().isOpen()) {
@@ -38,7 +38,7 @@ Database::~Database(){
 }
 
 /**
- * Checks whether the database is open.
+ * Checks whether the database is open
  * @return Status of the database
  */
 bool Database::open() {

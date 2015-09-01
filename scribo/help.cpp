@@ -86,7 +86,7 @@ Help::~Help()
 }
 
 /**
- * @brief Plays a video and refreshes the widget
+ * Plays a video and refreshes the widget
  */
 void Help::on_actionPlay_triggered()
 {
@@ -95,7 +95,7 @@ void Help::on_actionPlay_triggered()
 }
 
 /**
- * @brief Pauses a video and refreshes the widget
+ * Pauses a video and refreshes the widget
  */
 void Help::on_actionPause_triggered()
 {
@@ -104,7 +104,7 @@ void Help::on_actionPause_triggered()
 }
 
 /**
- * @brief Stops a video and refreshes the widget
+ * Stops a video and refreshes the widget
  */
 void Help::on_actionStop_triggered(){
     player->stop();
@@ -112,7 +112,7 @@ void Help::on_actionStop_triggered(){
 }
 
 /**
- * @brief Sets the size of the help widget
+ * Sets the size of the help widget
  */
 void Help::setHelpHeight()
 {
