@@ -58,21 +58,22 @@ void Preference::savePreferences() {
 void Preference::loadPreferences() {
     QSettings setting("rk", "scribo");
     setting.beginGroup("writing");
-    ui->spinBox_preference_marginTop->setValue( setting.value("marginTop", 35).toInt() );
-    ui->spinBox_preference_marginRight->setValue( setting.value("marginRight", 35).toInt() );
+    ui->spinBox_preference_marginTop->setValue( setting.value("marginTop", 0).toInt() );
+    ui->spinBox_preference_marginRight->setValue( setting.value("marginRight", 0).toInt() );
     ui->spinBox_preference_marginBottom->setValue( setting.value("marginBottom", 0).toInt() );
-    ui->spinBox_preference_marginLeft->setValue( setting.value("marginLeft", 35).toInt() );
-    ui->spinBox_preference_paddingTop->setValue( setting.value("paddingTop", 20).toInt() );
-    ui->spinBox_preference_paddingRight->setValue( setting.value("paddingRight", 20).toInt() );
+    ui->spinBox_preference_marginLeft->setValue( setting.value("marginLeft", 0).toInt() );
+    ui->spinBox_preference_paddingTop->setValue( setting.value("paddingTop", 0).toInt() );
+    ui->spinBox_preference_paddingRight->setValue( setting.value("paddingRight", 0).toInt() );
     ui->spinBox_preference_paddingBottom->setValue( setting.value("paddingBottom", 0).toInt() );
-    ui->spinBox_preference_paddingLeft->setValue( setting.value("paddingLeft", 20).toInt() );
+    ui->spinBox_preference_paddingLeft->setValue( setting.value("paddingLeft", 0).toInt() );
     ui->checkBox_preference_password->setChecked( setting.value("passwordUsed", false).toBool() );
     setting.endGroup();
 
     query.prepare("SELECT `Password` FROM `password`;");
     query.exec();
     QString passwordBase;
-    while ( query.next() ) {
+    while ( query.next() )
+    {
         passwordBase = query.value(0).toString();
     }
     if ( passwordBase.isEmpty() )
@@ -99,17 +100,21 @@ bool Preference::checkPreferences()
 
     if ( password.contains(rePassword) || password.isEmpty() )
     {
-        if ( password.isEmpty() && ui->checkBox_preference_password->isChecked() ) {
+        if ( password.isEmpty() && ui->checkBox_preference_password->isChecked() )
+        {
             return false;
-        } else if ( !password.isEmpty() )
+        }
+        else if ( !password.isEmpty() )
         {
             QByteArray passwordBase = password.toUtf8();
 
             query.prepare("SELECT COUNT(*) FROM `password`;");
             query.exec();
-            while ( query.next() ) {
+            while ( query.next() )
+            {
                 QString count = query.value(0).toString();
-                if (count != "0") {
+                if (count != "0")
+                {
                     query.prepare("DELETE FROM `password`;");
                     query.exec();
                 }
@@ -119,17 +124,35 @@ bool Preference::checkPreferences()
             query.prepare("INSERT INTO `password` (`Password`) "
                           "VALUES (?);");
             query.bindValue( 0, passwordBase.toBase64() );
-            if ( query.exec() ) {
+            if ( query.exec() )
+            {
                 db.commit();
                 qDebug() << "The password has been saved successfully";
-            } else {
+            }
+            else
+            {
                 db.rollback();
                 qDebug() << "The password could not be saved";
                 qDebug() << query.lastError();
                 return false;
             }
         }
-    } else {
+        else if ( password.isEmpty() )
+        {
+            query.prepare("SELECT COUNT(*) FROM `password`;");
+            query.exec();
+            while ( query.next() )
+            {
+                QString count = query.value(0).toString();
+                if (count != "0")
+            {
+                query.prepare("DELETE FROM `password`;");
+                query.exec();
+            }
+        }
+    }
+    } else
+    {
         return false;
     }
     return true;

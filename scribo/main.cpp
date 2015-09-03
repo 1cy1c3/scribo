@@ -39,8 +39,11 @@
 #define LOGFILE
 
 #ifdef LOGFILE
-#define MY_ASSERT(c) if (c == false) ;
-#define MY_ASSERT_X(c, where, what) if (c == false) ;
+
+/**
+ * Text stream for logging
+ */
+QTextStream *out = 0;
 
 /**
  * Register a message handler for a better logging in a logfile
@@ -51,23 +54,27 @@
  */
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QFile file(QDate::currentDate().toString("dd_MM_yyyy.log"));
+    QString debugdate = QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss");
+        switch (type)
+        {
+        case QtDebugMsg:
+            debugdate += " [D]";
+            break;
+        case QtWarningMsg:
+            debugdate += " [W]";
+            break;
+        case QtCriticalMsg:
+            debugdate += " [C]";
+            break;
+        case QtFatalMsg:
+            debugdate += " [F]";
+        }
+        (*out) << debugdate << " " << msg << endl;
 
-    MY_ASSERT(file.open(QIODevice::Append | QIODevice::Text));
-
-    QTextStream out(&file);
-    out << QTime::currentTime().toString("hh:mm:ss.zzz ");
-
-    switch (type)
-    {
-    case QtDebugMsg:	out << "DBG"; break;
-    case QtWarningMsg:  out << "WRN"; break;
-    case QtCriticalMsg: out << "CRT"; break;
-    case QtFatalMsg:    out << "FTL"; break;
-    }
-
-    out << " " << msg << '\n';
-    out.flush();
+        if (QtFatalMsg == type)
+        {
+            abort();
+        }
 }
 
 #endif
@@ -80,12 +87,21 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
  */
 int main(int argc, char *argv[])
 {
-    // Install message handler
-    #ifdef LOGFILE
-        qInstallMessageHandler(messageOutput);
-    #endif
-
     QApplication a(argc, argv);
+
+    #ifdef LOGFILE
+    QString fileName = QCoreApplication::applicationFilePath() + ".log";
+    QFile *log = new QFile(fileName);
+    if (log->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+    {
+        out = new QTextStream(log);
+        qInstallMessageHandler(messageOutput);
+    }
+    else
+    {
+        qDebug() << "Error opening log file '" << fileName << "'. All debug output redirected to console.";
+    }
+    #endif
 
     // Check language
     QTranslator translator;

@@ -39,3 +39,4 @@ Makefile*
 
 # Ressources
 /res
+/build*

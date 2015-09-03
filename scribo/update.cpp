@@ -14,7 +14,7 @@ QString Update::hostAddress = "127.0.0.1";
 /**
  * Port of the server
  */
-int Update::port = 11001;
+int Update::port = 1234;
 
 /**
   * Initializes the update object

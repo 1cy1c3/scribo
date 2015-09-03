@@ -15,12 +15,12 @@ Help::Help(QWidget *parent) :
     QDialog(parent)
 {
     this->setWindowTitle(tr("Help"));
-    this->setStyleSheet("#Help {height: 400px;}");
+    this->setStyleSheet("#Help {height: 262px;}");
 
     player = new QMediaPlayer(this);
     vw = new QVideoWidget(this);
-    vw->setMinimumHeight(300);
-    vw->setMinimumWidth(400);
+    vw->setMinimumHeight(262);
+    vw->setMinimumWidth(420);
     player->setVideoOutput(vw);
 
     #ifdef WIN
@@ -116,5 +116,5 @@ void Help::on_actionStop_triggered(){
  */
 void Help::setHelpHeight()
 {
-    this->setStyleSheet("#Help {height: 300px;}");
+    this->setStyleSheet("#Help {height: 262px;}");
 }

@@ -9,7 +9,7 @@
 /**
  * Port of the server
  */
-int ScriboServer::port = 11001;
+int ScriboServer::port = 1234;
 
 /**
  * @brief Constructor of the server, initializes it
