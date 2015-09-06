@@ -30,4 +30,4 @@ Generate the documentation regarding the special comments with a command in your
 $ cd scribo
 $ doxygen doxygen.config
 ```
-Afterwards, you will get a website with helpful informations about the code. Furthermore, read the documentation about the framework `Qt` at http://doc.qt.io/ or in the IDE `Qt creator`. 
+Afterwards, you will get a website with helpful information about the code. Furthermore, read the documentation about the framework `Qt` at http://doc.qt.io/ or in the IDE `Qt creator`. 
