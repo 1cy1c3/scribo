@@ -1,4 +1,4 @@
-scribo
+Scribo
 ============
 
 # Description
